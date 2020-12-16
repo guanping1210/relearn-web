@@ -24,3 +24,13 @@
      x, 
      addX
  }
+
+//  模块基本信息
+console.log('module-id', module.id)
+console.log('module-name', module.filename)
+console.log('module-loaded', module.loaded)
+console.log('module-parent', module.parent)
+
+// 上面的module.exports生效，exports.a导出为undefined
+exports.a = 300
+exports.b = 800
