@@ -1,3 +1,3 @@
-const module_ = require('./index').moduleA
-
-console.log(module_)
+require('./index.js', function(moduleA) {
+  console.log(moduleA(15))
+})
