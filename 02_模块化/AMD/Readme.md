@@ -1,5 +1,7 @@
 #### AMD
 
+一个文件定义一个模块，不能define多个模块
+
 1、异步加载，允许指定回调函数，适用于浏览器环境(所有的模块语句，都定义在一个回调函数中)
 
 - require([moduleName], callback)
@@ -22,3 +24,6 @@ moduleB.something()
 4、define 在 node 环境下直接用 node 执行的话会报错，需要借助 requirejs 库
 
 5、require([moduleName], callback)调用组件
+
+
+#### 常见的AMD规范的库

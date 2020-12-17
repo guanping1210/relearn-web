@@ -1,0 +1,1 @@
+#### UMD,  同时支持CommonJS 和 AMD

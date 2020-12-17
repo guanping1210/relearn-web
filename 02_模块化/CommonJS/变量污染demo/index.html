@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        var a = 'hello'
+        // 5秒后打印出word，说明a已经被污染了
+        setTimeout(() => {
+          console.log(a)
+        }, 5000)
+      </script>   
+      <script>
+        var a = 'word'
+      </script> 
+  </body>
+</html>
