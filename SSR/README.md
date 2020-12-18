@@ -7,3 +7,7 @@
 3.1 ReactDOM.hydrate(<App />, document.getElementById('root'))
 
 <!-- https://www.jb51.net/article/158209.html -->
+
+先用 webpack 创建一个正常运行的 react 应用，再对应 SSR 改造
+
+<!-- https://daief.tech/2019-07-02/get-a-ssr-demo-step-by-step.html -->
