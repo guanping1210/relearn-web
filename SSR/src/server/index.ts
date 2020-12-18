@@ -3,4 +3,6 @@ import path from "path";
 import * as React from "react";
 import ReactDOMServer from "react-dom/server";
 
-const serverBuild = require("../server").default;
+const serverBuild = require("../distServer").default;
+
+const manifest = require("../distClient/");
