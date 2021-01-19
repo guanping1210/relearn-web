@@ -1,29 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <script>
-    /**
-     * 1、生成 HTTPRequest 实例
-     * 2、建立连接 open (第三个参数表示是否异步)
-     * 3、发送请求 send
-     * 4、根据状态判断处理数据 status
-    */
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 1、生成 HTTPRequest 实例
+       * 2、建立连接 open (第三个参数表示是否异步)
+       * 3、发送请求 send
+       * 4、根据状态判断处理数据 status
+       */
+      function ajax(type, url, boolean) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open(type, url, boolean);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.send();
+          xhr.onreadystatechange = function () {
+            if (xhr.status === 200 && xhr.readyState === 4) {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            }
+          };
+        });
+      }
 
+      ajax("get", "https://cnodejs.org/api/v1/topics", true).then((res) => {
+        console.log("请求结果: ", res);
+      });
 
-    /**
-     * 1、注意一下每种content-type格式的区别
-     * 2、注意一下表单的默认提交方式会导致刷新
-     * 3、中断请求 x.abort
-     * 4、实践一下各种跨域的方式 CORS、JSONP、...
-     * 5、cookie的携带设置
-    */
+      /**
+       * 1、注意一下每种content-type格式的区别 https://www.cnblogs.com/klb561/p/10090540.html
+       *    text-html: html格式
+       *    text-plain: 纯文本格式
+       *    text/xml: xml格式
+       *    image/gif：gif格式
+       *    image/jpeg: jpg格式
+       *    image/png: png图片
+       *
+       *    application/x-www-from-urlencoded: 表单数据key-value格式
+       *    application/form-data: 表单的文件上传格式
+       *    application/octet-stream: 二进制流数据，常用于文件下载
+       *    application/pdf: pdf格式
+       *    application/json: json格式
+       *    application/(xml | xhtml+xml)：xml\XHTML格式
+       *
+       * 2、注意一下表单的默认提交方式会导致刷新
+       *
+       * 3、中断请求 x.abort
+       *    axios + CancelToken: 原理是从外部操作中断promise流
+       *    fetch + AbortController:
+       *    xhr.abort
+       *
+       * 4、实践一下各种跨域的方式 CORS、JSONP、...   https://zhuanlan.zhihu.com/p/81809258
+       *    同源策略：浏览器的安全机制，防止XSS、CSFR，协议+域名+端口相同，才可谓同源
+       *      jsonp: 利用script标签没有跨域限制，发送带callback参数的get请求，后端将数据拼凑到callback函数中，返回给浏览器
+       *      CORS：跨站资源共享
+       *              简单请求(head、get、post + Accept、Accept-Language、Content-Language、Content-Type: www | form-data | plain)
+       *                  Access-Control-Allow-Origin: *
+       *
+       *              非简单请求(除开以上的):
+       *                  Access-Control-Allow-Methods:
+       *                  Access-Control-Allow-Methods:
+       *      nginx代理跨域: 配置proxy 服务器
+       *      node中间件代理跨域：
+       *      document.domain + iframe跨域：
+       *      postMessage:
+       *      websocket:
+       *
+       * 5、cookie的携带设置  https://cloud.tencent.com/developer/article/1467263
+       *    同域名下的请求，会自动带上cookie;
+       *    跨域默认不带cookie，需要设置withcredentials：true + Access-Control-Allow-Origin: 目标域 + Access-Control-Allow-Credentials: true
+       *
+       */
 
-  </script>
-</body>
+      // 前端的回调执行函数
+      function handleCallback(res) {
+        alert(JSON.stringify(res));
+      }
+
+      function jsonp() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+
+        // 传参一个回调函数名给后端，方便后端返回时执行这个在前端定义的回调函数
+        script.src =
+          "http://www.domain2.com:8080/login?user=admin&callback=handleCallback";
+        document.head.appendChild(script);
+      }
+
+      jsonp();
+    </script>
+  </body>
 </html>

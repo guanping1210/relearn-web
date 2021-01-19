@@ -1,5 +1,5 @@
 /**
- * 实现commonjs的requir 导入功能 
+ * 实现commonjs的 requir 导入功能 
  */
 const path = require('path')
 const fs = require('fs')
@@ -36,5 +36,12 @@ readfile('./index.js')
 
 /**
  * 总体思路：
- * 1、
+ * 1、node定义了一个构造函数Module, 所有的模块都是Module的实例
+ *    id 、filename、loaded、parent、children、exports
+ * 
+ * 2、export 原理
+ *   (1)、找到文件的路径，相对路径变为绝对路径
+ *   (2)、读取文件内容, 其实就是字符串
+ *   (3)、将文件内容包裹在一个匿名函数表达式中 (function(){})
+ *   (4)、将字符串变为可执行的代码
  */
