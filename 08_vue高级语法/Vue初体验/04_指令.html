@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+      .test {
+        color: red;
+      }
+      .uuu {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <button v-on:click="change">click me</button>
+
+      <h3>绑定值，显示到html上：</h3>
+      <div>
+        <h4>{{ message }}</h4>
+        <h4 v-once>{{ message }}</h4>
+        <h5 v-html="url"></h5>
+        <p v-text="message"></p>
+        <p v-pre>{{ preText }}</p>
+      </div>
+
+      <h3>动态绑定属性：</h3>
+      <div>
+        <img v-bind:src="imgUrl" />
+        <img :src="imgUrl" />
+        <a v-bind:href="href">点击我</a>
+        <a :href="href">点击我</a>
+
+        <span :class="className">2222</span>
+        <span class="uuu" :class="{ test: className }">4444</span>
+      </div>
+
+      <div>
+        <ul>
+          <li v-for="(item, index) in movies" v-on:click="clickIndex(index)">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: "hello",
+          url: "<span>test</span>",
+          preText: `1
+          1222        4444
+          `,
+          imgUrl:
+            "https://cn.bing.com/images/search?view=detailV2&ccid=tXLPDc%2f5&id=45D72D829A017469F1EA6883C8F60E02321D9683&thid=OIP.tXLPDc_5P-E7ca-KtD_UVAHaEK&mediaurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fRb572cf0dcff93fe13b71af8ab43fd454%3frik%3dg5YdMgIO9siDaA%26riu%3dhttp%253a%252f%252fimg.ewebweb.com%252fuploads%252f20191006%252f20%252f1570365161-shmEFlWfHU.jpg%26ehk%3du5A16U5IZ7u6Wi3KtC7OBarR5lf1nOd8UfJP0USvLXg%253d%26risl%3d%26pid%3dImgRaw&exph=576&expw=1024&q=%e5%9b%be%e7%89%87&simid=607990460020493330&ck=A741AC45FDEA82830C3A15143284A2C5&selectedIndex=1&qpvt=%e5%9b%be%e7%89%87&FORM=IRPRST&ajaxhist=0",
+          href: "http://www.baidu.com",
+          className: "test",
+          movies: ["大话西游", "盗梦空间", "莫扎特"],
+        },
+        methods: {
+          change() {
+            this.message = Date.now();
+          },
+          clickIndex(index) {
+            console.log("index", index);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
+<!-- 
+  插值语法：将数据放置到html上，也就是所谓的template上
+    v-for: 遍历
+    v-once: 只渲染一次，后续修改之后都不会变动
+    v-html: 展示html标签 v-html="string", string内部的DOM标签会被渲染
+    v-text: 展示文本, 但是不灵活
+    v-pre:  展示源码，不会替换
+    v-cloak: 
+
+  动态的绑定：将值动态的插入到模板内容中
+    v-bind:xxx="yyy" : 表示动态绑定xxx属性，并赋值yyy, 可以用 :xxx="yyy" 语法来替代，更简洁, yyy可以是对象，也可以是字符串，也可以是数组
+ -->

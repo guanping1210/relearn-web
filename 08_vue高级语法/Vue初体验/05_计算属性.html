@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <button v-on:click="clickMe">click</button>
+      <h4>{{ count }}</h4>
+      <h4>total: {{ total }}</h4>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          count: 0,
+        },
+        computed: {
+          // 计算属性内部会有set方法和get方法
+          total: function () {
+            return this.count * this.count;
+          },
+        },
+        methods: {
+          clickMe() {
+            return this.count++;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

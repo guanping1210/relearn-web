@@ -7,8 +7,16 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   </head>
   <body>
-    <div id="root"></div>
-
-    <script></script>
+    <div id="app">
+      <h4>{{ message }}</h4>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: "hello",
+        },
+      });
+    </script>
   </body>
 </html>

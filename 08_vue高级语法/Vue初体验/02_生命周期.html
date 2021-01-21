@@ -10,6 +10,7 @@
     <div id="root">
       <p v-on:click="hello"><button>click me</button></p>
       <p>{{ message }}</p>
+      <p>{{ calc }}</p>
     </div>
     <script>
       // new Vue表示实例化，接受一些option配置
@@ -31,6 +32,12 @@
         watch: {
           message: function () {
             console.log(" i am updating");
+          },
+        },
+        // 计算属性, 能够监听到message的变化，自动执行calc函数
+        computed: {
+          calc() {
+            return this.message + "world";
           },
         },
 
