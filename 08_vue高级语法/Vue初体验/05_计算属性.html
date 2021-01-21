@@ -13,6 +13,10 @@
       <h4>total: {{ total }}</h4>
     </div>
     <script>
+      /**
+       * computed 计算属性比methods里面的函数执行效率要高，
+       * 针对频繁计算的情况，计算属性会进行缓存，如果多次使用，计算属性只会执行一次，而methods里面的函数会执行多次
+       */
       const app = new Vue({
         el: "#app",
         data: {

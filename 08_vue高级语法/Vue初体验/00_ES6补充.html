@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //   1、变量作用域：变量在什么范围内可用
+      /**
+       * 为什么闭包能解决for问题：因为函数有自己的作用域，永远使用自己的变量
+       */
+      let arr = [];
+
+      for (var i = 0; i < 10; i++) {
+        //  闭包：i作为变量传递给了一个函数，函数是一个作用域，与外面的i无关
+        arr[i] = (function (abc) {
+          return () => console.log(abc);
+        })(i);
+      }
+    </script>
+  </body>
+</html>
+<!-- 
+    
+ -->
