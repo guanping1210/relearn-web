@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="root">
+      <p v-on:click="hello"><button>click me</button></p>
+      <p>{{ message }}</p>
+    </div>
+    <script>
+      // new Vue表示实例化，接受一些option配置
+      // 主要配置有el, data, method, 以及生命周期钩子
+      const app = new Vue({
+        // 挂载的节点
+        el: "#root",
+        // 定义的数据
+        data: {
+          message: "hello world",
+        },
+        // 自定义方法
+        methods: {
+          hello() {
+            this.message = new Date();
+          },
+        },
+        // 监听 -- watch -- 能够监听key的变化，从而执行后面的函数，类似于react中的useEffect
+        watch: {
+          message: function () {
+            console.log(" i am updating");
+          },
+        },
+
+        // 生命周期
+        // 1、创建Vue实例之前
+        beforeCreate() {
+          console.log("beforeCreate", Date.now(), this.message);
+        },
+        // 2、创建实例成功（一般在这么实现数据的异步请求）
+        created() {
+          console.log("created", Date.now(), this.message);
+        },
+        // 3、渲染DOM之前（加载组件的第一次渲染）
+        beforeMount() {
+          console.log("beforeMount", Date.now(), this.message);
+        },
+        // 4、渲染DOM完成（加载组件第一次渲染）
+        mounted() {
+          console.log("mounted", Date.now(), this.message);
+        },
+        // 5、重新渲染之前（数据更新等操作控制DOM重新渲染）
+        beforeUpdate() {
+          console.log("beforeUpdate", Date.now(), this.message);
+        },
+        // 6、重新渲染完成之后
+        updated() {
+          console.log("updated", Date.now(), this.message);
+        },
+        // 7、销毁之前
+        beforeDestroy() {
+          console.log("beforeDestroy", Date.now(), this.message);
+        },
+        // 8、销毁完成
+        destroyed() {
+          console.log("destroyed", Date.now(), this.message);
+        },
+      });
+    </script>
+  </body>
+</html>

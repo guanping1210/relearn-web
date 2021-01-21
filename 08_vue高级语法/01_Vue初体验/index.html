@@ -1,52 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-
-</head>
-<body>
-  <div id="app">  
-    <!-- view -->
-    <h3>1、绑定数据</h3>
-    <h4>{{ message }}</h4>
-    <h3>2、循环遍历v-for</h3>
-    <ul>
-      <li v-for="item in movies">
-        {{ item }}
-      </li>
-    </ul>
-    <h3>3、计数器, 绑定点击事件v-on:click</h3>
-    <div>当前计数：{{ count }}</div>
-    <button v-on:click="count--">-</button>
-    <button v-on:click="count++">+</button>
-    <br>
-    <button v-on:click="count--">-</button>
-    <button v-on:click="add">+</button>
-  </div>
-  <script>
-    // viewModale就是 vue创建的实例
-    const app = new Vue({
-      el: '#app', // 用于挂载的真实节点
-      // modal
-      data: { // 定义数据
-        message: '你好啊，Mary',
-        movies: ['大话西游', '盗梦空间', '莫扎特'],
-        count: 0,
-      },
-      methods: { // 定义方法
-        add() {
-          this.count ++
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- view -->
+      <h3>1、绑定数据</h3>
+      <h4>{{ message }}</h4>
+      <h3>2、循环遍历v-for</h3>
+      <ul>
+        <li v-for="item in movies">{{ item }}</li>
+      </ul>
+      <h3>3、计数器, 绑定点击事件v-on:click</h3>
+      <div>当前计数：{{ count }}</div>
+      <button v-on:click="count--">-</button>
+      <button v-on:click="count++">+</button>
+      <br />
+      <button v-on:click="count--">-</button>
+      <button v-on:click="add">+</button>
+    </div>
+    <script>
+      // viewModale就是 vue创建的实例
+      const app = new Vue({
+        el: "#app", // 用于挂载的真实节点
+        // modal
+        data: {
+          // 定义数据
+          message: "你好啊，Mary",
+          movies: ["大话西游", "盗梦空间", "莫扎特"],
+          count: 0,
         },
-        sub() {
-          this.count --
-        }
-      }
-    })
-  </script>
-
-</body>
+        methods: {
+          // 定义方法
+          add() {
+            this.count++;
+          },
+          sub() {
+            this.count--;
+          },
+        },
+        // 生命周期函数：在实例创建完成后被立即调用，这一步实例已经完成数据观测、属性和方法的运算、watch/event时间回调
+        // 主要用于调用ajax获取也没初始化所需的数据
+        created: function () {
+          console.log("create", Date.now());
+        },
+        // 生命周期函数：表示el被新创建的vm.$el替换，并挂载到实例上去之后，调用该钩子函数
+        mounted: function () {
+          console.log("mounted", Date.now());
+        },
+      });
+    </script>
+  </body>
 </html>
+<!-- 
+  Vue实例的options，可以传递哪些：
+    el: 字符串，挂载的真实DOM节点
+    data: 对象，里面是定义的数据
+    methods: 对象，里面是定义的方法
+
+  生命周期：一个事务从诞生到消亡的整个过程
+ -->
