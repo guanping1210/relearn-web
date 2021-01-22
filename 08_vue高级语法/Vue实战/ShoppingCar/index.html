@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h4>购物车</h4>
+      <ul>
+        <li>
+          <span class="name title">书籍名称</span>
+          <span class="date title">出版日期</span>
+          <span class="price title">书籍价格</span>
+          <span class="count title">购买数量</span>
+          <span class="operation title"> 删除 </span>
+        </li>
+        <li v-for="(good, index) in goods">
+          <span class="name">{{ good.name }}</span>
+          <span class="date">{{ good.date }}</span>
+          <span class="price">{{ good.price | showPrice }}</span>
+          <span class="count">
+            <button @click="sub(index)" :disabled="good.count === 1">-</button>
+            <span>{{ good.count }}</span>
+            <button @click="add(index)">+</button>
+          </span>
+          <span class="operation" @click="delete(index)"> 删除 </span>
+        </li>
+        <li>总价：{{ totalPrice }}</li>
+      </ul>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          goods: [
+            {
+              name: "哈利波特",
+              price: 28.9,
+              date: "2020-09-18",
+              count: 0,
+            },
+          ],
+        },
+        filters: {
+          showPrice: function (price) {
+            return "￥" + price;
+          },
+        },
+        computed: {
+          totalPrice: function () {
+            let price = 0;
+
+            price = this.goods.reduce(function (prev, next) {
+              return prev + next.count * next.price;
+            }, 0);
+
+            return price;
+          },
+        },
+        methods: {
+          add(index) {
+            this.goods[index].count++;
+          },
+          sub(index) {
+            this.goods[index].count--;
+          },
+          delete(index) {
+            this.goods.splice(index, 1, 0);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

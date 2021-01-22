@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h4>{{ message }}</h4>
+      <input type="text" v-model="message" />
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: "hello",
+        },
+      });
+    </script>
+  </body>
+</html>
+
+<!-- 
+    表单输入双向绑定：输入框输入，另一方展示
+    v-model='xxx': xxx表示变量名
+ -->

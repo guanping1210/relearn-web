@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h4>{{ message | showPrice }}</h4>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: 10,
+        },
+        // 全局过滤器
+        filters: {
+          showPrice: function (value) {
+            return "$" + value;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
+
+<!-- 
+    | xxx : 过滤器，对使用过滤器的地方，会调用xxx函数，最终显示xxx返回的值
+ -->

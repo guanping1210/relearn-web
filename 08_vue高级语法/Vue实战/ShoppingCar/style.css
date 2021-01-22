@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 20px;
+}
+
+.name,
+.date,
+.price,
+.count {
+  min-width: 100px;
+}
+
+.title {
+  background: grey;
+  color: #fff;
+  font-size: 16px;
+  padding: 5px;
+  margin-top: -5px;
+}
+
+ul {
+  width: 482px;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px #ccc;
+}
+
+ul,
+li {
+  list-style: none;
+  display: flex;
+  margin: 5px 0;
+}
