@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h4>{{ message }}</h4>
+      <div>
+        <my-comp></my-comp>
+      </div>
+      <p>
+        <my-comp></my-comp>
+      </p>
+      <p>
+        <my-comp></my-comp>
+      </p>
+      <my-comp></my-comp>
+      <my-comp></my-comp>
+      <my-comp></my-comp>
+
+      <div>
+        <cpn></cpn>
+        <cpn></cpn>
+        <cpn></cpn>
+        <cpn></cpn>
+      </div>
+
+      <comp2></comp2>
+    </div>
+    <script>
+      // 1、创建组件
+      const component = Vue.extend({
+        template: "<div>22222222222244444444</div>",
+      });
+
+      //   2、 全局注册组件
+      Vue.component("my-comp", component);
+      Vue.component("comp2", {
+        template: "<div>hello world</div>",
+      });
+
+      //   3、使用组件
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: "hello",
+        },
+        // 局部注册组件
+        components: {
+          cpn: component,
+        },
+      });
+    </script>
+  </body>
+</html>
+
+<!-- 
+    组件：抽象独立可复用的组件
+        1、创建组件构造器
+        2、注册组件
+        3、使用组件
+
+    创建组件：
+        Vue.extend({ template: 'xxx' })
+
+    注册组件：
+        全局组件：Vue.component(key, component)
+        局部组件：new Vue({ components: { key, component }})
+
+    使用组件：
+        <xxx></xxx>
+
+    组件通信：
+
+ -->
