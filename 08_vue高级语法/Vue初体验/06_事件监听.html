@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p>v-on 与 @</p>
+      <button v-on:click="count--">-</button>
+      <button @click="count++">+</button>
+
+      <p>事件默认的参数是浏览器生成的一个event对象</p>
+      <button @click="change">change</button>
+
+      <p>显示的传递event事件参数给函数: $event</p>
+      <button @click="change2($event, 'test')">change2</button>
+      <h4>{{ count }}</h4>
+
+      <div>
+        <p>阻止默认事件：使用修饰符 .prevent(基本用于表单的提交事件)</p>
+        <p>阻止冒泡：使用修饰符 .stop</p>
+        <div @click.stop="click1">
+          <div @click="click2">4444</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          count: 0,
+        },
+        methods: {
+          // 调用的时候没有传参，点击的时候是传递的MouseEvent对象
+          // vue会默认将浏览器生成的event对象传递过来
+          change(event) {
+            console.log(event);
+            this.count = Math.random();
+          },
+
+          change2(event, name) {
+            console.log(event, name);
+            this.count = Math.random();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
+
+<!-- 
+  绑定事件：
+    v-on:xxx = 'yyyy'  xxx是事件类型,例如click\pressup\mouseover等，yyy是事件名，可缩写为 @xxx 语法糖，更简洁
+      yyy | yyy(参数)
+
+      一个参数时，函数调用时省略了括号，但是方法本身是需要一个参数的，默认参数是undefined,不会报错、
+      多个参数时，需要event对象，也需要其他参数：显示的参入event对象，用$event来表示
+
+    修饰符：
+      v-on:xxx.stop  阻止冒泡
+      v-on.xxx.prevent 阻止默认事件
+      v-on.xxx.[keyCode | keyAlias] 监听指定code的事件，其他code不监听
+      v-on.xxx.enter  键盘按下
+      v-on.xxx.native  监听组件根元素的原生事件
+      v-on.xxx.once   只触发一次
+
+ -->

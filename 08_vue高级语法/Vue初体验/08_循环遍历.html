@@ -8,13 +8,23 @@
   </head>
   <body>
     <div id="app">
-      <h4>{{ message }}</h4>
+      <p>遍历数组</p>
+      <ul>
+        <li v-for="(item, index) in arr">{{ item }}</li>
+        <li v-for="(item, index) of arr">{{ item + '_' + index }}</li>
+        <li v-for="(item, value) in obj">{{ item }}-{{ value }}</li>
+        <li v-for="value of obj">{{ value }}</li>
+      </ul>
     </div>
     <script>
       const app = new Vue({
         el: "#app",
         data: {
-          message: "hello",
+          arr: ["hello", "world"],
+          obj: {
+            name: "mary",
+            age: 20,
+          },
         },
       });
     </script>
