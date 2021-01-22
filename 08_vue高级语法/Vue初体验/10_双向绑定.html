@@ -10,12 +10,24 @@
     <div id="app">
       <h4>{{ message }}</h4>
       <input type="text" v-model="message" />
+
+      <input type="radio" value="boy" v-model="sex">男</input>
+      <input type="radio" value="girl" v-model="sex">女</input>
+      {{ sex }}
+        <div>
+            <input type="checkbox" value="boy" v-model="list">男</input>
+             <input type="checkbox" value="girl" v-model="list">女</input>
+             <input type="checkbox" value="girl2" v-model="list">女2</input>
+            {{ list }}
+        </div>
     </div>
     <script>
       const app = new Vue({
         el: "#app",
         data: {
           message: "hello",
+          sex: 'boy',
+          list: []
         },
       });
     </script>
