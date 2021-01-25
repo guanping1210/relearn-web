@@ -63,6 +63,7 @@ console.log(xz.uname)
 // 3、继承  -->  用extends能够继承父类的属性和方法
 class SingStar extends Start {
   constructor(props) {
+    // super关键字，能够让子类访问父类中的构造函数，就相当于把props传递给了父类
     super(props)
   }
 }
