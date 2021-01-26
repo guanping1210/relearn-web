@@ -64,8 +64,14 @@ console.log(xz.uname)
 class SingStar extends Start {
   constructor(props) {
     // super关键字，能够让子类访问父类中的构造函数，就相当于把props传递给了父类
+    // 可以调用父类的构造函数，也可以调用父类的普通函数
+    // 必须写在this之前
     super(props)
+
+    this.props = props
   }
+
+  // super.xxx() , 调用父类的函数
 }
 
 const singer = new SingStar('dengziqi')
