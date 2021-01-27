@@ -88,5 +88,12 @@ Star.prototype = {
  */
 
 /**
- * 原型链：每个对象都有__proto__属性，能够形成一条链路，也就是所谓的原型链。
+ * 原型链：每个原型对象都有__proto__属性，能够形成一条链路，也就是所谓的原型链。
  */
+console.log(
+  Star.prototype.__proto__ === Object.prototype
+)
+
+console.log(
+  Object.prototype.__proto__ === null
+)
