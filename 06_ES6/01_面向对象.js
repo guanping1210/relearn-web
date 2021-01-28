@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 /**
  * 面向过程编程POP：
@@ -61,7 +62,7 @@ const xz = new Star('xiaozhan')
 console.log(xz.uname)
 
 // 3、继承  -->  用extends能够继承父类的属性和方法
-class SingStar extends Start {
+class SingStar extends Star {
   constructor(props) {
     // super关键字，能够让子类访问父类中的构造函数，就相当于把props传递给了父类
     // 可以调用父类的构造函数，也可以调用父类的普通函数
