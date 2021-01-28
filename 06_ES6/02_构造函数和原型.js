@@ -1,11 +1,15 @@
 // @ts-nocheck
 /**
- * 创建对象的方式：
+ * 类与对象的区别：类(也就是构造函数)就是对象的模板，对象就是“类”的实例
+ * 
+ * 创建对象的方式：JS中一切都是对象
  *  1、对象字面量
  *  2、new Object()
  *  3、自定义构造函数: 是一种比较特殊的函数，用来初始化对象的，
  *                  也就是为对象成员变量赋初始值。提取公共方法和属性，
  *  4、class 
+ * 
+ * 构造函数一定要配合 new 关键字产生实例对象：因为new的时候会自动执行构造函数
  * 
  * new的过程：
  *  1、在内存中创建一个新的空对象
@@ -22,28 +26,31 @@
  * 构造函数虽然好用，但是存在浪费内存的问题
  * 
  */
-// 通过this添加的叫实例成员
+// 通过 this 添加的叫实例成员， 那么只能通过实例来访问
 function Star(uname) {
   this.uname = uname
 
   // 多次new的话，会创建多个内存块来存放同一个sing函数
   this.sing = function() {
-    console.log('唱歌')
+    console.log(this.uname + '唱歌')
   }
 }
 
 // 静态成员
 Star.sex = 'girl'
 
-let ldh = new Star('刘德海')
-ldh.sing()
+var ldh = new Star('刘德华')
+var wsl = new Star('汪苏泷')
 
+ldh.sing()
+wsl.sing()
+
+console.log(ldh.sing === wsl.sing) // false，说明两个实例的sing函数，不是来自同一个内存
 
 /**
- * 构造函数原型prototype: 
- *  每个构造函数都有一个prototype属性，指向另一个对象。这个对象内部包含的属性和方法，是所有实例共享的。
- * 
- *  
+ * 构造函数的原型prototype: 
+ *  每个构造函数都有一个prototype属性，指向另一个对，这个对象就叫做原型对象。
+ *  原型对象内部包含的属性和方法，是所有实例共享的。  
  */
 Star.prototype.dance = function() {
   console.log('跳舞')
@@ -52,12 +59,16 @@ Star.prototype.dance = function() {
 let xxx = new Star('xxx')
 let yyy = new Star('yyy')
 
-// 说明xxx和yyy的dance都指向同一块内存
+// 说明xxx和yyy的dance都指向同一块内存，能够较少内存开销
 console.log(xxx.dance === yyy.dance) // true
 
 /**
- *  对象原型__proto__: 
- *    对象身上系统自己添加一个__proto__属性, 指向构造函数的prototype对象
+ *  实例对象原型__proto__: 
+ *    每个对象身上，系统自己有添加一个__proto__属性, 这个属性指向构造函数的prototype对象，
+ *    也就是说__proto__，也是指向原型对象的
+ * 
+ *  所以：构造函数的prototype是指向原型对象的，实例对象的__proto__属性也是指向原型对象的
+ *  结论：构造函数.prototype === 实例.__proto__
  *  
  */
 
@@ -67,25 +78,30 @@ console.log(xxx.dance === yyy.dance) // true
 console.log(xxx.__proto__ === Star.prototype) // true
 
 /**
+ * 原型对象上系统默认自带一个constructor属性。
+ * 
  * constructor属性：
  *  对象原型__proto__和构造函数prototype原型对象内部都有一个constructor属性，
  *  这个属性指向构造函数本身。
  */
-console.log(Star.prototype.constructor)
-console.log(xxx.__proto__.constructor)
+
+console.log(Star.prototype.constructor === Star) // 说明原型对象上的constructor属性是指向构造函数自身的
 console.log(xxx.__proto__.constructor === Star.prototype.constructor)  // true
 
-// 很多情况下，我们需要手动的利用constructor这个属性只会原来的构造函数
+// 很多情况下，我们需要手动的利用constructor这个属性指回原来的构造函数
+// 原因是：给Star.prototype赋予新的值，会导致prototype指向一块新的内存地址了，不再是指向构造函数的内存地址
 // constructor手动更改的情况,指回原来的构造函数
 Star.prototype = {
-  constructor: Star,
+  constructor: Star, // 修正构造函数指向
   sing() {},
   dance() {}
 }
 
 /**
  * 构造函数、实例、原型对象三者之间的关系：
- *  
+ *  构造函数.prototype === 原型对象
+ *  实例.__proto__ === 原型对象
+ *  原型对象.constructor === 构造函数
  */
 
 /**
