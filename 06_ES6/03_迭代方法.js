@@ -25,3 +25,4 @@ arr.some((value, index, array) => {
 arr.every((value, index, array) => {
 
 })
+
