@@ -114,3 +114,63 @@ console.log(
 console.log(
   Object.prototype.__proto__ === null
 )
+
+/**
+ * 原型内部的this指向问题：
+ *  1、构造函数中的this指向的是对象实例；
+ */
+ldh.sing() // Star原型对象上的sing，现在是ldh调用的，所以this就指向ldh
+
+/**
+ * ES6之前的继承：
+ *  构造函数+原型对象： 组合继承
+ */
+function fn() {
+  console.log('我要喝手磨咖啡')
+  console.log(this)
+}
+
+// call()调用函数
+fn.call()
+
+// call改变this指向,此时fn函数的this就指向来 o 这个对象
+var o = {
+  name: 'ldh'
+}
+fn.call(o)
+
+// 父类
+function Father(uname) {
+  this.uname = uname
+}
+
+/**
+ * 1、构造函数继承：核心就是把子类的this通过call给关联到父类上
+ */
+function Son(uname) {
+  Father.call(this, uname)
+  this.uname = uname
+}
+
+/**
+ * 2、原型继承：子类的原型prototype=父类的实例
+ * 如果直接把子类.prototype=父类.prototype，会直接影响到父类的原型，因为内存都指向同一块
+ */
+Father.prototype.money = function() {
+  console.log('赚钱')
+}
+
+Son.prototype = new Father() // 因为实例化出来的对象是新开辟的内存，但是相当于赋予了新的内存，不再是以前的内存
+Son.prototype.constructor = Son // 需要修正构造函数的指向
+
+/**
+ * 3、ES中类的继承：class extends, 本质上还是函数
+ *    类的本质就是一个函数，可以认为类就是构造函数的另外一种写法
+ */
+
+/**
+ * ES5通过构造函数+原型实现面向对象编程的特点：
+ *  1、构造函数都有prototype属性
+ *  2、实例对象都有__proto__属性
+ *  3、原型对象上都有constructor属性
+ */
