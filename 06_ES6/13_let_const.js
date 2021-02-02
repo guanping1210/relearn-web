@@ -15,6 +15,16 @@ console.log(a) // ReferenceError，找不到a
 // const 声明常量，就是内存地址不能变的，而且必须赋予初始值
 const PI = 3.1415926
 
+if(true) {
+    const a = 10
+    if(true) {
+        const a = 20
+        console.log(a) // 20
+    }
+    console.log(a) // 10
+}
+console.log(a) // a is not defined
+
 
 /**
  * JS错误类型：
@@ -26,7 +36,4 @@ const PI = 3.1415926
  *  6、EvalError: eval()函数执行错误
  */
 
- function test(a = 1, b) {
-     return a + b
- }
- test.length
+
