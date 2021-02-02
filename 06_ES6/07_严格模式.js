@@ -7,7 +7,7 @@ const { StrictMode } = require("react");
  * 变化：
  *  1、变量规定：变量没声明就赋值，是错误的
  *  2、this指向：非严格模式在全局作用域下this指向window，严格模式先全局作用域中this指向的undefined
- *  3、构造函数：严格模式下，构造函数不加new来调用内部属性，相当于是undefined.xxxx
+ *  3、构造函数：严格模式下，构造函数不加new来调用this绑定的内部属性，都是undefined
  *  4、new 实例化的构造函数指向创建的对象实例
  *  5、定时器还是指向window
  *  6、事件、对象还是指向调用者 
@@ -17,10 +17,10 @@ const { StrictMode } = require("react");
 'use strict' // 开启严格模式
 
 function Star() {
-    this.name = 'mmmm'
+    this.xxx = 'mmmm'
 }
 
-Star.name // === undefined.name
+console.log(Star.xxx) // undefined, 和模式没什么关系。这是构造函数的特性
 
 function fn(a, a) {
     console.log(a + a)
