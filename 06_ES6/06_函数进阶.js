@@ -46,10 +46,19 @@ function Star() {}
 new Star()
 
 // 4、绑定事件函数
-document.onClick = function() {}
+document.body.onclick = function() {}
 
-// 5、定时器函数
-setInterval(function(){}, 1000)
+// 5、定时器函数 --> 内部的this一直是window
+setTimeout(function(){}, 1000);
+
+var btn = document.querySelector('button')
+btn.onclick = function() {
+  this.disable = true // this --> btn
+
+  setTimeout(function(){
+    this.disable = false // this --> window
+  }.bind(this), 3000) // 通过bind绑定，可以将内部的this指向为btn, 而且可以延迟执行
+};
 
 // 6、立即执行函数
 (function() {
@@ -57,11 +66,8 @@ setInterval(function(){}, 1000)
 })()
 
 
-
-
-
-
-
 /**
- * new Function 用法
+ * 改变内部this指向：call、apply、bind
+ * 
+ * 
  */
