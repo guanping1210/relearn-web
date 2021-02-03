@@ -78,3 +78,44 @@ class SingStar extends Star {
 
 const singer = new SingStar('dengziqi')
 console.log(singer.money)
+
+/**
+ * ES6引入了新的类的概念，class是个新的语法糖而已，写法更简单，ES5之前是用构造函数来模拟类
+ *  class: 声明类
+ *  constructor: 定义构造函数初始化
+ *  extends: 继承父类
+ *  super: 调用父级构造函数
+ *  static: 定义静态属性和方法
+ */
+class Phone {
+  constructor(brand, price) {
+    this.branch = brand
+    this.price = price
+  }
+
+  // 静态成员，只能自身访问，实例不能访问
+  static name = '手机'
+
+  call() {
+    console.log('语音电话')
+  }
+}
+
+class HuaWei extends Phone {
+  constructor(brand, price, color, size) {
+    super(brand, price)
+
+    this.color = color
+    this.size = size
+  }
+
+  // getter和setter, 调用price属性，就会自动执行price函数，返回2000
+  get price() {
+    return 2000
+  } 
+
+  // 改写了父类的call 方法
+  call() {
+    console.log('视频通话')
+  }
+}
