@@ -24,6 +24,9 @@ server.on('request', function(request, response) {
         default: response.write('success')
     }
 
+    // Content-Type 告诉对方发送的数据内容的格式
+    response.setHeader('Content-Type', 'text/plain; charset=utf-8')
+
     response.end()
 })
 

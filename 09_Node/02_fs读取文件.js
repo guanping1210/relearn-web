@@ -25,3 +25,13 @@ fs.writeFile('./data/test.md', 'nice to meet u', function(err) {
 
     console.log('文件写入成功')
 })
+
+
+/**
+ * 文件系统分同步和异步操作：
+ *                异步：              同步：
+ *  读取文件：    readFile            readFileSync
+ *  打开文件：    open
+ *  获取文件信息：stat
+ *      
+ */

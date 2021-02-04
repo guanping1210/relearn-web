@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      {
+        a = 10;
+        function a() {}
+        a = 20;
+
+        console.log("1111", a);
+      }
+      console.log(a);
+
+      {
+        function b() {}
+        b = 30;
+        b = 40;
+
+        console.trace();
+      }
+      console.log(b);
+    </script>
+  </body>
+</html>
