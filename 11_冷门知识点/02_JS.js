@@ -7,6 +7,7 @@
  *  4、函数参数重名问题
  *  5、JS中的类型错误
  *  6、new Function
+ *  7、不用var声明的变量，不会提升
  */
 
 //  1、this --> 普通函数：指向调用者 + 箭头函数：永远指向定义时的上下文 + 定时器：永远指向全局window/global
@@ -60,12 +61,82 @@ function f(a, a) {
 
 f(1, 2) // 打印出 4， 因为相当于刚开始给a赋值1，得出1+1等于2结果，但是被第二个a赋值2给覆盖了； 严格模式下是不允许重命名的
 
-// 5、new Function --> 类似于eval， 可以执行字符串类型的代码，还可以传递参数
+// 5、JS 中的类型错误
+
+// 6、new Function --> 类似于eval， 可以执行字符串类型的代码，还可以传递参数
 var con = new Function('console.log(123)')
 con() //  打印123
 
 var con2 = new Function('x', "console.log(x)")
 con2(200) // 打印200， 接收的参数
 
-//  6、
+//  7、不使用var定义的变量，不会有提升
+console.log(a)  // a is not defined
+a = 100
 
+c = 10
+{
+    function c() {}
+}
+console.log(c)
+
+
+c = 10 
+{
+    console.log('1_', c)
+    c = 20
+}
+console.log('2_', c)
+
+
+c = 10 
+{
+    console.log('1_', c)
+    function c() {}
+}
+console.log('2_', c)
+
+
+function c() {}
+{
+    console.log('1_', c)
+    c = 30
+}
+console.log('2_', c)
+
+
+{
+    c = 10
+    console.log('1_', c, window.c)
+    function c() {}
+    console.log('3_', c, window.c)
+}
+console.log('2_', c)
+
+{
+    c = 10
+    console.log('1_', c, window.c)
+    // function c() {}
+    c = 40
+    console.log('3_', c, window.c)
+}
+console.log('2_', c)
+
+
+{
+    function c() {}
+    console.log('1_', c, window.c)
+    c = 30
+}
+console.log('2_', c)
+
+
+{
+    function c() {}
+
+    console.log('1_', c, window.c)
+    c = 30
+
+    console.log('3_', c, window.c)
+}
+console.log('2_', c)
