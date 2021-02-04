@@ -39,3 +39,14 @@ server.listen(3000, function() {
 /**
  * URI: 统一资源定位符
  */
+
+ {
+     a = 10
+     function a() {}
+ }
+ console.log(a)
+{
+    function b() {}
+    b = 20
+}
+console.log(b)
