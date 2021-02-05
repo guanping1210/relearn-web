@@ -14,7 +14,7 @@ let filesArray = []
 app.on('request', function(request, response) {
     // 如何得到www目录列表中的文件名和目录名 --> fs.readdir
     // 如何将得到的文件名和目录，替换到template.html中 --> 模板引擎
-
+    // TODO: 碰到文件夹，需要递归处理
     fs.readFile(path.resolve(__dirname, './www/template.html'), (err, data) => {
         if(err) {
             response.end('404 Not Found')
