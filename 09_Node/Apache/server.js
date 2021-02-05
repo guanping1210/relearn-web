@@ -9,55 +9,45 @@ const app = http.createServer()
 // http://localhost:3000/Login/index.html --> www/Login/index.html
 // http://localhost:3000/imgs/logo.jpg --> www/imgs/logo.jpg
 
+let filesArray = []
+
 app.on('request', function(request, response) {
+    // 如何得到www目录列表中的文件名和目录名 --> fs.readdir
+    // 如何将得到的文件名和目录，替换到template.html中 --> 模板引擎
 
-    switch(request.url) {
-        case '/index.html': {
-            fs.readFile(path.resolve(__dirname, './www/index.html'), (err, data) => {
+    fs.readFile(path.resolve(__dirname, './www/template.html'), (err, data) => {
+        if(err) {
+            response.end('404 Not Found')
+        }
+
+        if(request.url === '/') {
+            fs.readdir(path.resolve(__dirname, './www'), (err, files) => {
                 if(err) {
-                    response.end('404 Not Found')
+                    response.end('Can not find www dir')
                 }
+                
+                filesArray = files
+                const content = data.toString().split('<div id="root">')
+                let addDir = ''
+    
+                files.filter(item => item !== 'template.html').forEach(item => {
+                    const isDir = fs.lstatSync(path.resolve(__dirname, `./www/${item}`)).isDirectory()
+                    addDir += `<div><span style="display: inline-block; min-width: 100px">${isDir ? '文件夹' : '文件'}</span> <a href="${item}">${item}</a><br /></div>`
+                })
+    
                 response.setHeader('Content-Type', 'text/html;charset=uft-8')
-                response.end(data.toString())
-
+                response.end(content[0]  + addDir + content[1])
             })
-            break;
-        }
-
-        case '/Login/index.html': {
-            fs.readFile(path.resolve(__dirname, './www/Login/index.html'), (err, data) => {
+        } else {
+            fs.readFile(path.resolve(__dirname, `./www${request.url}`), (err, data) => {
                 if(err) {
-                    response.end('404 Not Found')
-                }
-                response.setHeader('Content-Type', 'text/html;charset=uft-8')
-                response.end(data.toString())
-            })
-            break
-        }
-
-        case '/imgs/logo.jpg': {
-            fs.readFile(path.resolve(__dirname, './www/imgs/logo.jpg'), (err, data) => {
-                if(err) {
-                    response.end('404 Not Found')
-                }
-                response.setHeader('Content-Type', 'image/jpeg;charset=uft-8')
-                response.end(data)
-            })
-            break
-        }
-
-        default: {
-            fs.readFile(path.resolve(__dirname, './www/template.html'), (err, data) => {
-                if(err) {
-                    response.end('404 Not Found')
+                    return response.end(`Can not find www ${request.url}`)
                 }
                 response.setHeader('Content-Type', 'text/html;charset=uft-8')
                 response.end(data.toString())
             })
-            break
-            break
         }
-    }
+    })
 })
 
 app.listen(3000, function() {
