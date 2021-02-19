@@ -299,3 +299,10 @@ https://juejin.cn/post/6844904073737535496
   - 白屏时间：domloading - fetchStart
   - domready 时间：domContentLoadedEventEnd - fetchStart
   - onload 时间： loadEventEnd - fetchStart
+
+#### 常见浏览器内核
+- Trident IE浏览器内核
+- Gecko Firfox浏览器内核
+- Presto Opera浏览器内核
+- Webkit Safair浏览器内核
+- Blink  谷歌浏览器内核
