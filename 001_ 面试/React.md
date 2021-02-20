@@ -166,7 +166,7 @@ https://www.php.cn/js-tutorial-457313.html
 #### 如何理解 Flux 与 MVC
 
 - 传统的 MVC，在分离数据、UI 和逻辑方面做的很好，但是会导致两个问题：数据流不清晰、缺乏数据的完整性
-- Flux,
+- Flux, 是一种强制单向数据流的架构模式， action -> dispatcher -> store -> view -> action
 
 #### 什么是 React Fiber
 
@@ -187,6 +187,31 @@ https://www.php.cn/js-tutorial-457313.html
 #### 调用 setState 时，React render 是如何工作的
 
 - 走的是 update 流程
+
+#### Redux
+
+- Redux 是数据管理工具
+- 遵循单一数据来源、状态只读、使用纯函数进行修改的三个原则
+
+- Redux 组件
+
+  - Action 用来描述发生了什么事情的对象
+  - Reducer 确定状态将如何变化，纯函数
+  - Store 整个程序的状态树
+  - View 显示 Store 提供的数据
+  - action -> reducer -> store -> view -> action
+
+- 定义 action, 包含 type 和数据，type 表示执行的操作类型， 通常只是一个对象{ type, data }
+- 在 Redux 中，action 被 Action Creators 所创造
+
+```
+  function add(data) {
+    return { type, data }
+  }
+```
+
+- Reducer，是纯函数，接收先前的状态和 action，然后返回一个新的状态
+- Store，就是一个普通的全局对象，保存这程序的状态，并提供一些方法来访问状态、调度操作和注册监听器。
 
 #### React.createElement
 
