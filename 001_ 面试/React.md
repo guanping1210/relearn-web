@@ -428,7 +428,7 @@ class ErrorBoundary extends React.Component {
   - render 阶段：主要是对比出哪些 DOM 节点需要更新
   - commit 阶段: 将 render 阶段收集到的信息更新到真实节点中
 
-#### react 如何调度一个任务
+#### react 如何调度一个任务 https://zhuanlan.zhihu.com/p/347522106
 
 - 时间切片：将多个粒度小的任务放入一个个时间切片中执行的一种方法，可以用 requestIdleCallback 模拟
 - React 是内部自己实现了一套 requestIdleCallback 的过程，拿到浏览器空闲时间，做相应的操作，用的时 messageChannel
