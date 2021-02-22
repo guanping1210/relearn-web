@@ -40,3 +40,4 @@ const newArr = function(arr) {
 console.log(newArr(arrr)) // [1,2,3,4,5,6]
 
 // js 源码实现  https://blog.csdn.net/Beijiyang999/article/details/80186242
+// https://blog.csdn.net/weixin_44492275/article/details/112199248
