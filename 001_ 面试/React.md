@@ -1,4 +1,5 @@
 https://www.php.cn/js-tutorial-457313.html
+https://zhuanlan.zhihu.com/p/57544233
 
 #### 什么是虚拟 DOM
 
@@ -234,3 +235,208 @@ https://www.php.cn/js-tutorial-457313.html
   p.name // 10
   p.getName() // 10, 子类没有书写constructor，会默认添加一个。但是如果写了constructor函数，必须调用super() 获取this
 ```
+
+#### React Hooks 详解
+
+##### useState --> 支持函数组件使用 state 状态
+
+- 语法 const [state, setState] = useState(初始值)
+  - 传入一个初始值参数，返回一个数组，第一个原生是 state 变量名，第二个是修改 state 值的方法
+- 与类中的 setState 的异同点：
+
+  - 相同：都是异步的
+  - 不同：类中的 setState 是合并的，函数组件中的 setState 是替换
+
+##### useEffect --> 函数组件中执行副作用的地方，例如网络请求、修改 UI、事件函数绑定 等, 执行与 DOM 无关的副作用操作
+
+- 语法：useEffect(() => { ... }, [依赖]), 接受两个参数
+  - 第一个是函数，是第一次渲染以及后续更新时要执行的副作用
+    - 这个函数可以有返回值，返回值也必须是个函数，会在组件被销毁时执行
+  - 第二个参数是个数组，用来优化 useEffect 的，只有当数组中的依赖有变化时，才会执行这个 useEffect
+
+##### useContext --> 获取上下文值
+
+- 语法：const value = useContext(myContext)
+  - 接受上下文对象（从 React.createContext 返回的值），并返回该上下文的当前上下文值
+  - 当前上下文的值由树中调用组件上方 value 最近的 props 确定， myContext.Provider
+
+```
+  const ThemeContext = createContext(null)
+
+  const Text = () => {
+    return <ThemeContext.Provider value="hello">
+      <Example />  // Example内部能够通过useContext API获取到传入的context值
+    </ThemeContext>
+  }
+
+  const Example = () => {
+    const context = useContext(ThemeContext)
+
+    return context // hello
+  }
+```
+
+##### useReducer --> 模拟 redux，是组件内部的复杂 state 的替代方案
+
+- 语法：const [state, dispatch] = useReducer(reducer, initialState, init)
+
+  - reducer，是纯函数，接受 state 和 action，返回新的 state
+  - initialState，初始化状态
+  - init, 延迟优化，可以将初始化状态设置为 init(initialState)
+
+- 与 useState 的区别：
+  - useState 适用于简单的状态，而 useReducer 适用于复杂的状态
+  - useState 更新数据是异步的，而 useReducer 获取的 dispatch 方法更新数据是同步的
+
+```
+  <div onClick={
+    setCount(count + 1)
+    setCount(count + 1)
+  }>点击一次，count只往上+1</div>
+
+  <div onClick={
+    dispatch({ type: '加1' })
+    dispatch({ type: '加1' })
+  }>点击一次，count会往上+2</div>
+```
+
+##### useCallback --> 缓存函数，根据依赖项的变化，产生新的缓存函数
+
+- 语法：const cb = useCallback(() => { ... }, [依赖])
+  - 返回值是一个缓存函数，传递内联回调和一些列依赖项
+  - 这个回调函数能够根据一些依赖项目的变化而发生变化
+  - 可以防止不必要的渲染
+
+##### useMemo --> 缓存值，根据依赖项的变化，从而生成新的缓存之
+
+- 语法：const value = useMemo(() => { ... }, [依赖])
+
+  - 返回一个缓存值，useMemo 只会在依赖项发生变更时，重新计算得出的 mermoized 值
+  - 有助于避免每个渲染上进行昂贵的计算，优化子组件的渲染（例如 A 有子组件 B、C，当 A 的 props 变化时，会导致 BC 一起变化，使用 useMemo 优化，可以只让 B 重新渲染，C 不渲染）
+
+- useMemo 在渲染过程中传递的函数会运行，不要做那些在渲染时通常不会做的事情，例如副作用等
+
+##### useRef --> 获取组件实例或 DOM 节点
+
+- 语法：const ref = useRef()
+  - useRef 返回一个可变的 ref 对象，其中 current 属性被初始化为传递的参数，返回的对象将存留在整个组件的生命周期中
+  - 可以保留任何值
+
+##### useLayoutEffect --> 执行与布局相关的副作用, 是在所有 DOM 更新完成后触发的
+
+- 语法：useLayoutEffect(() => { ... })
+
+##### 编写自定义 hooks
+
+- 不要从常规 JavaScript 函数中调用 hooks
+- 不要在循环、条件或嵌套中调用 hooks
+- 必须在组件的顶层调用 hooks
+- 自定义 hooks 必须用 use 开头，这是一种约定
+
+#### Error boundary 错误边界 --> 能够子组件树的 JS 异常，记录错误并返回一个回退的 UI
+
+- 错误边界：只能捕获在组件树种比当前组件低的组件错误, 配合 getDerivedStateFromError 和 componentDidCatch 使用
+  - getDerivedStateFromError, 在后代组件抛出错误后被调用，将抛出的错误作为参数，并返回一个新的值以更新 state，在渲染阶段调用，不允许出现副作用
+  - componentDidCatch, 在后代组件抛出错误时调用，会在渲染提交阶段被调用，允许执行副作用
+- 捕获范围：
+
+  - 渲染期间
+  - 生命周期内
+  - 整个组件树构造函数内
+
+- 不能捕获到的错误：
+
+  - 事件函数内的错误，因为不发生在渲染阶段，这种错误采用 try...catch 捕获
+  - 异步代码，例如 setTimeout 或 requestAnimationFrame 回调函数
+  - 服务端渲染，压根儿不支持 Error Boundary
+  - Error Boundary 自身抛出的错误，而不是子组件的错误，捕获不到
+
+- 存在的地方：应用的最顶层或者子组件的外面，保护应用不崩溃
+
+```
+class ErrorBoundary extends React.Component {
+  constructor() {
+    super(props)
+
+    this.state = { hasError: false }
+  }
+
+  static getDerivdStaeFromError(error) {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, indo) {
+
+  }
+
+  render() {
+    if(this.state.hashError) {
+      return <div>自定义替换页面</div>
+    }
+
+    return this.props.children
+  }
+}
+```
+
+#### react portal
+
+- 帮助我们在 JSX 中跟普通组件一样直接使用自定义组件，而且自定义组件层级不在父组件内，而是独立显示与 app 同级的组件
+- 语法：ReactDOM.createPortal(组件内容，组件挂载的真实 DOM 节点)
+
+```
+<div id="app-root"></div>
+<div id="dialog"></div>
+```
+
+#### react Fragement --> 批量返回节点（以前是必须用一个根节点包裹起来）
+
+```
+  <React.Fragment>
+    <p>111</p>
+    <p>222</p>
+  </React.Fragment>
+
+  <>
+    <p>111</p>
+    <p>222</p>
+  </>
+```
+
+#### react lazy 和 suspense
+
+- lazy 能够帮助我们实现代码分割的功能
+- suspense，用来捕获还没加载好的组件，并暂停渲染，显示相应的 callback 组件; 与 error boundary 类似，只不过 boundary 是捕获错误，显示相应的 callback 组件
+
+- 注意：
+  - SSR 不支持 lazy 特性
+  - Lazy 必须搭配 Suspence 使用，否则会报错
+
+```
+  <Suspence fallback={<div>hello world</div>}>
+    <A />
+    <B />
+    <C />
+  </Suspence>
+```
+
+#### react lazy 懒加载组件
+
+#### react Fiber 的渲染过程
+
+- 渲染过程主要分两个阶段：render 阶段和 commit 阶段
+  - render 阶段：主要是对比出哪些 DOM 节点需要更新
+  - commit 阶段: 将 render 阶段收集到的信息更新到真实节点中
+
+#### react 如何调度一个任务
+
+- 时间切片：将多个粒度小的任务放入一个个时间切片中执行的一种方法，可以用 requestIdleCallback 模拟
+- React 是内部自己实现了一套 requestIdleCallback 的过程，拿到浏览器空闲时间，做相应的操作，用的时 messageChannel
+- requestIdleCallback(callback, { timeout: 时间 })，指定空闲时间执行 callback 函数，如果时间超过了 timeout 设定的时间，那么强制执行
+
+- 调度过程：
+  - 初始化
+    - 出现新的更新时，会根据当前时间和过期时间，推算出优先级和过期时间，然后新建一个任务，把任务放入任务队列
+  - ## 运行任务
+
+#### 服务端渲染
