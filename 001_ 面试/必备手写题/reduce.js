@@ -11,6 +11,7 @@
  *  initial: 如果没有这个值，会默认取数据的第一项作为初始值
  *
  */
+// 基础用法
 var arr = [1,2,3,4]
 var sum = arr.reduce((prev, cur, index, arr) => {
     return prev + cur
@@ -26,3 +27,16 @@ var result = [
 var score = result.reduce((prev, cur, index, arr) => {
     return cur.score + prev
 }, 0)
+
+// 数组降维
+var arrr = [1, [2,3], [4,5, [6]]]
+
+const newArr = function(arr) {
+    return arr.reduce((pre, cur) => {
+        return pre.concat(Array.isArray(cur) ? newArr(cur) : cur)
+    })
+}
+
+console.log(newArr(arrr)) // [1,2,3,4,5,6]
+
+// js 源码实现
