@@ -28,13 +28,13 @@ var score = result.reduce((prev, cur, index, arr) => {
     return cur.score + prev
 }, 0)
 
-// 数组降维
+// 多维数组降维
 var arrr = [1, [2,3], [4,5, [6]]]
 
 const newArr = function(arr) {
     return arr.reduce((pre, cur) => {
         return pre.concat(Array.isArray(cur) ? newArr(cur) : cur)
-    })
+    }, [])
 }
 
 console.log(newArr(arrr)) // [1,2,3,4,5,6]
@@ -52,9 +52,9 @@ console.log(newArr(arrr)) // [1,2,3,4,5,6]
  *  3、持续执行这个过长，直到数组中每一项都访问了一次
  *  4、返回最终结果
  */
-Array.prototype.myReduce = function(callback, init) {
+Array.prototype.myReduce = function(fn, init) {
     let initialArr = this
-    let arr = initialArr.concat()
+    let arr = initialArr
 
     if(init) {
         arr.unshift(init)
@@ -71,8 +71,3 @@ Array.prototype.myReduce = function(callback, init) {
 
     return newValue
 }
-
-
-
-
-// https://blog.csdn.net/weixin_44492275/article/details/112199248
