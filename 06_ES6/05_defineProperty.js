@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * defineProperty 方法：定义对象中新属性或者修改原有的属性
  *      Object.defineProperty(obj. prop, descriptor)

@@ -286,3 +286,9 @@ function curry(fn, ...args) {
 ```
 
 ```
+
+#### JS 中的作用域和上下文不是同一个概念：作用域是确定函数调用时可访问变量的范围，上下文总是关键字 this 的值，而 this 的值，是函数运行时决定的，this 表示的是一个可访问对象 --> https://www.cnblogs.com/wangfupeng1988/p/3977924.html
+
+#### JS 中 this --> 其实就是个对象，
+
+#### JS 中的上下文 --> 上下文是
