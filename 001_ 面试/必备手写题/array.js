@@ -164,3 +164,25 @@ Array.prototype.myConcat = function(...args) {
 }
 
 [1, [2]].myConcat([3,[4]], 3,4, 5)
+
+// splice --> 删除指定位置的指定个数的数据，然后在指定位置添加数据；返回的是删除的数据 --> 原数组上操作
+var aa = [10, 20, 30, 40, 50]
+aa.splice(1, 2, 100) // 删除下标为1开始的两个数据，也就是删除20，30，然后添加100为下标为1的数据
+
+/**
+ * splice 原理分析：splice(x, n, ...args)
+ *  1、至少接受一个参数，表示从下标为x的地方开始操作
+ *  2、n 如果省略，那么下标为X往后的数据都会被删除；n 如果有具体的值，那么从下标为X的地方往后数n个数据进行删除
+ *  3、args 如果省略，那么表示不需要在下标为x的地方添加数据；如果有值，那么把args代表的值，添加到
+ *  4、修改的是原数组，原数组会变化；然后返回一个新数组，新数组表示被截取掉的数组
+ *  5、如果x, n是非数值类型，那么原数组不会发生变化
+ */
+Array.prototype.mySplice = function(x, n, ...args) {
+    if(typeof x !== 'number') {
+        return this
+    }
+
+    if(n && typeof n !== 'number') {
+        return this
+    }
+}
