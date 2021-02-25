@@ -183,7 +183,33 @@ https://zhuanlan.zhihu.com/p/57544233
 #### 如何避免组件的重新渲染
 
 - PureComponent 对 props 进行浅比较
-- React.memo 对 props 进行浅比较
+- React.memo 对 props 进行浅比较, 检测到 props 没变化，就不更新，通常用于 A 组件内有 BC 子组件，A 重新渲染了，但是 BC 依赖的 props 没变化，就不重新渲染
+- 一般配合 useCallback、useMemo 使用
+
+- 举例：当 button 被点击时，没有使用 useCallback, useMemo, React.memo 时候， 由于父组件的 count 状态会更新，所以导致父组件重新渲染，此时子组件也会重新渲染
+- 如果只使用了 useCallback，useMemo，虽然函数和值被缓存下来了，但是子组件没有包裹 React.memo，当父组件更新时，虽然函数函数和缓存值没有更新，但是子组件也会重新渲染
+- 所以，当父组件渲染，子组件为了避免不必要的渲染，也就是当子组件依赖的 props 没发生变化时，就不需要重新渲染，这时候用 React.memo 包裹起来，就能够达到这样的效果
+
+```
+const A = () => {
+  const [count, setCount] = useState(0)
+
+  const click = useCallback(() => { // 如果不用useCallback，那么
+    console.log('111')
+  }, [])
+
+  return <div>
+    <button onClick={() => setCount(count++)}>点击我</button>
+    <B click={click}>
+    <C>
+  </div>
+}
+
+const B = ({ click }) => {
+  return <></>
+}
+export default React.memo(B) // 使用了memo包裹，B只有在依赖的click 变化时，才会发生变化
+```
 
 #### 调用 setState 时，React render 是如何工作的
 
@@ -300,6 +326,39 @@ https://zhuanlan.zhihu.com/p/57544233
   }>点击一次，count会往上+2</div>
 ```
 
+#### useReducer 如何支持同步 --> 对 useReducer 功能增强即可
+
+```
+  // 封装一个wrapperDispath高阶函数
+  const isPromise = (obj) => {
+    if (!obj) return false;
+
+    return;
+    (typeof obj === "function" || typeof obj === "object") &&
+      typeof obj.then === "function";
+  };
+
+  const wrapperDispatch = (dispatch) => {
+    return function (action) {
+      if (isPromise(action.payload)) {
+        return action.payload.then((res) => {
+          dispatch({ ...action, payload: res });
+        });
+      }
+
+      return dispatch(action);
+    };
+  };
+
+  export default wrapperDispatch;
+
+  // 外部dispatch被包裹增强
+  const [state, dispatch] = useReducer(reducer, initial)
+  const wrpDispath = wrapperDispatch(dispatch)
+
+  wrpDispatch({ type: 'action', payload: fetch(xxx) })
+```
+
 ##### useCallback --> 缓存函数，根据依赖项的变化，产生新的缓存函数
 
 - 语法：const cb = useCallback(() => { ... }, [依赖])
@@ -403,6 +462,8 @@ class ErrorBoundary extends React.Component {
   </>
 ```
 
+#### react 内部比较 state, props 是否一致，用的 Object.is(a, b)比较 --> 引用数据类型比较的是内存地址，基本数据类型比较的值
+
 #### react lazy 和 suspense
 
 - lazy 能够帮助我们实现代码分割的功能
@@ -413,6 +474,8 @@ class ErrorBoundary extends React.Component {
   - Lazy 必须搭配 Suspence 使用，否则会报错
 
 ```
+  const A = Reac.lazy(() => import('./A.js'))
+
   <Suspence fallback={<div>hello world</div>}>
     <A />
     <B />
@@ -438,5 +501,7 @@ class ErrorBoundary extends React.Component {
   - 初始化
     - 出现新的更新时，会根据当前时间和过期时间，推算出优先级和过期时间，然后新建一个任务，把任务放入任务队列
   - ## 运行任务
+
+#### hooks 源码解读 --> https://react.jokcy.me/book/api/react.html
 
 #### 服务端渲染
