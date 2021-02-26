@@ -175,6 +175,73 @@ https://zhuanlan.zhihu.com/p/57544233
 - Fiber 的目标是提高其在动画、布局、等方面的使用性，并未不同类型的更新分配优先级，提高交互性能
 - Fiber 能够将渲染工作分成块，并将其分散到多个帧中
 
+- Fiber 是个对象，主要由以下组成：
+  - 自身的信息：tag（组件类型）、key、elementType、index...
+  - 相关节点信息：return(父节点)、sibling(兄弟节点)
+  - 指向自己的第一个子节点：child
+  - 新的 props: pendingProps
+  - 上一次渲染完的 props: memoizedProps
+  - 上一次渲染时的 state: memoizedState
+  - fiber 对应的组件产生的 update 放在这个队列：updateQueue
+  - 副作用信息：effectTag -> 这儿指的是对组件执行的操作，更新、删除、修改、移动 --> 用二进制，能够同时用一个数据，表达多种操作
+  - 记录下一个副作用: nextEffect
+  - 子树中的第一个 side effect: firstEffect
+  - 子树中的最后一个 side effect: lastEffect
+
+#### 渲染流程 --> 源码书籍资料 https://react.jokcy.me/book
+
+https://blog.csdn.net/dennis_jiang/article/details/106928259
+
+1、babel 内部将 jsx 转为 VDOM，通过调用 createElement --> 这时候形成的 VDOM 对象结构，能够通过.toString 打印出来，而且，这时候还没走到 ReactDOM.render 阶段
+2、真正的执行到了 ReactDOM.render 阶段，才会把 VDOM 转为 fiber 结构，再把 fiber 结构转为真正的 DOM 节树，挂载到真实节点上
+3、到 ReactDOM.render 函数的时候，会解析 VDOM，把 VDOM 转为 fiber 结构 --> 形成 fiber 结构
+4、根据 fiberRoot 是否存在，来判定是第一次渲染，还是更新。这时候我们先走第一次渲染，也就是创建 fiberRoot 节点 --> 调用的是 createContainer 函数
+5、不管是 setState 还是 ReactDOM.render，都会造成 React 更新，都会生产一个 update 的对象，并且赋值给 fiber.updateQueue
+6、然后调用 scheduleWork，进入调度之后走的流程都差不多了，与之前的调用没关系了（但是 ReactDOM.render，第一次基本上是走的调度的新增、新增、新增...流程，一直都是新增节点流程）
+7、进入调度之后，第一次渲染就不说了，全是新增。然后后续就开始说更新流程了
+8、在当前节点的 fiber 对象上创建了 update 对象之后，就进入调度过程了（enqueueUpdate(fiber, update); scheduleWord(fiber, expirationTime)）
+
+以下全部就是调度过程了：开始于 scheduleWork 函数
+9、先提前给一些全局变量赋值，方便保存
+10、调度内部对 fiber 树（是个链表嘛），进行遍历, 遍历每个 fiber 节点
+11、对每个 fiber 节点进行一些操作：创建子节点，字节点返回成为 next，没有 next 返回，就表示向下的节点遍历完了。
+12、节点遍历完之后，执行 completeUnitWork(内部的 beginWork 处理 effect tag)，处理一些 effect tag 操作，从下往上处理，一直处理到 root 节点或有 sibling 节点的位置开始，然后从 sibling 节点又开始执行 performWork 函数
+
+- - 备注：render 阶段：
+- - - workLoop 逻辑很简单，就是判定是否需要继续调用 performUnitOfWork
+      beginWork
+      reconcileChildren 函数内部，才是对 fiber 节点，进行真正的调和，也就是操作节点的增删查改（）
+
+13、等返回到 root 节点的时候，表示整棵树都遍历完了。那么这时候执行 commit 操作了。
+14、commit 阶段：就是遍历 effect list，然后执行 side effects，将数据的更新体现到 UI 上
+
+形成的链表：app = A(=a+b) + B + C
+app.child -> A.child -> a.child  
+然后 A.subling 指向 B，B 又是一个通过 child 连接起来的链表了
+
+#### 渲染流程的整体概述：每次 setState 之后 fiber 树都会从 root 开始进入与第一次渲染不相同的流程
+
+babel -> 将 jsx 转为 VDOM
+ReactDOM.render -> 接收 VDOM 和 root dom, 然后
+创建 fiberRoot 节点，进入调和阶段（疑问：fiberRoot 节点，是先全部创建为 fiber 树之后，再进入调和阶段，还是创建一个 root 之后就开始调和了，然后其他的 fiber 节点，是调和过程创建的吗）
+调和阶段分为两个阶段 render 阶段和 commit 阶段（针对单个 fiber 节点概述）
+render 阶段：
+--> render 阶段就是深度优先遍历 fiber 节点，直到遍历到叶子节点为止，从上往下的过程中会搭建子节点、收集记录 effectTag、记录 props 和 state 相关的更新，有声明周期函数的执行狗子函数
+--> 递归到没有 child 节点的时候，就从下往上开始返回（返回到最近的 sibling 或者 rootfiber）
+--> 递归返回阶段，从下往上走的时候，对 fiber 进行 diff 操作，对有操作的 fiber，标记 effect tag，同时把 props 的更新记录标记到 updateQueue 中
+
+render 阶段结束后，进入 commit 阶段：
+--> 就是去遍历每个 fiber 节点上的 effect list
+--> 执行 effect list 标记的所有更新；有相关生命周期的就执行相关生命周期
+--> 将更新完的 workFinished tree 赋值给 current tree
+
+- 全局入口 legacyRenderSubtreeIntoContainer 函数，内部会走两个逻辑，一个是新建 rootfiber 逻辑，一个是更新 rootfiber 逻辑 --> 走到最后，都是走的 updateContainer 函数
+- updateContainer 函数，就属于 reconciler 调和 阶段了
+- 在 updateContainer 内部，创建一个 update 对象，把 update 对象添加到 fiber.updateQueue 属性上
+- 执行 scheduleUpdateOnFiber 函数，进入真正的 work loop 阶段
+
+#### 调和的资料 https://blog.csdn.net/hupian1989/article/details/102617165
+
 #### Hooks 会取代 render props 和高阶组件吗
 
 - 不会。Hooks 只是更简洁的写法和用法而已。两种模式都有各人的用处
@@ -504,4 +571,79 @@ class ErrorBoundary extends React.Component {
 
 #### hooks 源码解读 --> https://react.jokcy.me/book/api/react.html
 
-#### 服务端渲染
+- hooks 产生的背景：从类组件去拥抱函数编程
+
+  - 类组件状态难以抽离和复用，能实现的方式是 HOC 和 render props，但是会修改组件结构，造成嵌套地狱
+  - 类组件有生命周期，而逻辑代码分散在声明周期函数中，而且和生命周期是强相关的，所以也就是导致了不容易分离
+  - class 内部的 this、生命周期和数据流的学习成本大
+
+- hooks 产生就是为了解决以上问题的：
+  - 组件逻辑复用，无需更改组件逻辑
+  - 逻辑容易抽离和复用
+  - 方便学习，就是函数
+  -
+
+#### render props --> 是一种在 react 组件直接使用一个值为函数的 props 共享代码的简单技术
+
+```
+  <Component render={data => (<div>{data}</div>)}>
+```
+
+#### useState 和 this.state 的原理区别
+
+- useState -- 内部通过 useReducer 来实现的 --> 重点查看 useReducer 源码
+
+  - 接收一个唯一参数，也就是初始值 state
+  - 可以在组件中多次使用 sate hook
+  - state 也是 immutble 的，，通过数组第二个参数 set 一个新值之后，原理的值会形参一个新的引用在下次渲染时
+  - 内部是个闭包机制，每次总能获取当前的值
+
+- this.state
+
+  - 普遍是个对象格式
+  - 更新 state 时合并
+  - state 是 immutable 的，setState 后一定会生成一个全新的 state 引用，通过 this.state 引用，导致每次执行后拿到的都是最新的 state 引用
+
+- 源码原理：
+  - useState 是挂载在当前组件上的，然后按照使用 useState 的顺序，生成了一个数组存储，将每个更新函数与下标对应
+  -
+
+#### 对 hooks 的理解 --> hooks 是一些函数，这些函数可以让你在函数组件中钩入 react state 以及生命周期等特性的函数（hook 是一个特殊函数，可以让你钩入 react 的特性）
+
+- 使用了 JS 的闭包机制
+
+- 函数组件原本是不支持 state 和生命周期的，但是现在用 hook, 可以钩入了，就可以支持了
+- useState: 就是允许你在函数组件中添加 state 的 hooks
+- useEffect: 就是允许你在函数组件中处理非 UI 任务的 hooks,调用 useEffect, 就是告诉 react 在完成对 DOM 的更改后运行你的副作用函数
+
+- 以前在的一个函数组件，如果要使用 state，那么必须改为 class 组件
+
+- 只能在最顶层使用 hook，不能在循环、条件或嵌套函数中调用 hooks
+- 只在 react 函数中调用 hooks，不能在普通的 javascript 函数中调用 hooks
+
+#### effect 副作用 --> 简单来说，就是和 UI 没什么直接关系的，肉眼看不见变化的东西
+
+- API 请求，肉眼看不见。等请求拿回数据，把数据给 UI 时，才能看见
+- 状态更新，肉眼看不见。更新到 UI 上时，才能看见
+- useEffect，是在每次更新 DOM 后执行，卸载 effect 也是每次重新渲染就卸载，而不是卸载组件时才卸载
+
+#### react 怎么知道组件内部，哪个 state 对应哪个 useState --> 按照 hook 的调用顺序
+
+- 只有 hooks 的调用顺序保持一致，react 就能将内部 state 和对应的 hooks 进行关联
+- 如果将一个 hook 写在条件判断中，那么这个 hook 和 state 的顺序就对应不上
+
+#### 自定义 hook --> 将组件逻辑提取到可服用的函数中
+
+```
+  function useCount(init) {
+    const [count, setCount] = useState(init)
+
+    const addOne = useCallback(() => {
+      setCount(pre => pre + 1)
+    }, [])
+
+    return [count, addOne]  // 外层直接调用addOne，不需要参数，就可以实现+1 的逻辑
+  }
+```
+
+#### 精读资料 https://juejin.cn/post/6844903854174109703#heading-2
