@@ -9,7 +9,20 @@
   <body>
     <script>
       /**
-       * 需要了解history路由的相关知识
+       * history对象： 保存浏览历史记录
+       *  属性说明：length 历史列表长度
+       *          current 当前访问URL
+       *          next 历史列表的下一个URL
+       *          previous 历史列表的前一个URL
+       *  方法：back()   返回上一个访问
+       *       forward()  访问下一个页面
+       *       go()  去到指定页面
+       *       pushState(state, title, url) 添加历史记录
+       *       replaceState() 修改历史记录
+       * 
+       *  检测浏览器url变化：
+       *    hash路由：onhashchange 检测hash变化
+       *    history路由：监听pushState和replaceState
        */
     </script>
   </body>

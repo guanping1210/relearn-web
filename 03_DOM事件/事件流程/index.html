@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <style>
+      #special {
+        width: 100px;
+        border: solid 1px #ccc;
+      }
+    </style>
   </head>
   <body>
     <h3>1、浏览器事件模型</h3>
@@ -78,9 +84,12 @@
       /**
        * 2、
        * addEventListener(事件类型，事件，是否在捕获阶段注册)
-       * 第三个参数默认为false
+       * 第三个参数默认为false，表示默认是在冒泡阶段进行注册的
        * 如果是在捕获阶段注册，那么打印的结果会是从外到内打印
-       * bubble-root -> bubble-container -> bubble-touch
+       * 当第三个参数设置为true的时候打印顺序为：bubble-root -> bubble-container -> bubble-touch
+       * 
+       * 为什么默认在冒泡阶段注册事件：
+       *  因为在捕获阶段，没有可以阻止事件的函数；而在冒泡阶段，是可以阻止的
        */
       document.getElementById("bubble-touch").addEventListener(
         "click",
@@ -107,12 +116,13 @@
       );
 
       /**
-       * 3、
+       * 移除注册的事件：
        * removeListener, 移除事件，需要对应的事件类型、事件名，以及注册阶段，
        * 才能正确的移除一个事件
        */
 
       /**
+       * 3、
        * target: 当前触发的元素，也就是当前点击的元素，是会变化的
        * currentTarget: 绑定事件的元素,在整个事件流中是不变的
        */
@@ -131,6 +141,12 @@
       /**
        * 5、
        * Mouseover与Mouseenter的区别：有的事件是不会冒泡的
+       * 
+       * 不会冒泡的事件：不冒泡的事件，大概率只有在捕获阶段进行注册
+       *  scroll
+       *  blur & focus
+       *  media 事件
+       *  mouseenter & mouseleave
        */
       document.getElementById("special").addEventListener("mouseover", (e) => {
         console.log("over", e.target, e.currentTarget);
@@ -142,24 +158,43 @@
 
       /**
        * 6、阻止冒泡 和 捕获 和 默认事件
-       * e.stopPropation()
-       * e.stopImmediatePropagation()
-       * e.preventDefault()
+       * e.stopPropation() // 阻止冒泡
+       * e.stopImmediatePropagation() // 阻止同一事件被其他监听器调用
+       * e.preventDefault() // 阻止默认事件
        * e.cancelBubble
        * return false
        */
 
       /**
        * 7、
-       * 通用的事件注册和移除的函数封装
+       * 通用的事件注册和移除的函数封装：核心是内部使用对象属性来模拟事件类型，用数组来存储事件; 实现注册事件和解绑事件
        * 主要是addEventListener和touch
        */
+      
+
 
       /**
        * 8、
        * 自定义事件：new Event('事件名字')
        *
        */
+       class EventEmitter {
+        constructor(){
+          this.event = {}
+        }
+
+        // 绑定事件
+        on(type, callback) {
+
+        }
+        // 移除事件
+        remove(type, callback) {}
+
+        //  执行事件
+        emit() {
+
+        }
+      }
 
       /**
        * 9、css对事件的影响

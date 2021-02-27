@@ -145,15 +145,7 @@ function Father(uname) {
 }
 
 /**
- * 1、构造函数继承：核心就是把子类的this通过call给关联到父类上
- */
-function Son(uname) {
-  Father.call(this, uname)
-  this.uname = uname
-}
-
-/**
- * 2、原型继承：子类的原型prototype=父类的实例
+ * 1、原型继承：子类的原型prototype=父类的实例
  * 如果直接把子类.prototype=父类.prototype，会直接影响到父类的原型，因为内存都指向同一块
  */
 Father.prototype.money = function() {
@@ -162,6 +154,14 @@ Father.prototype.money = function() {
 
 Son.prototype = new Father() // 因为实例化出来的对象是新开辟的内存，但是相当于赋予了新的内存，不再是以前的内存
 Son.prototype.constructor = Son // 需要修正构造函数的指向
+
+/**
+ * 2、构造函数继承：核心就是把子类的this通过call给关联到父类上
+ */
+function Son(uname) {
+  Father.call(this, uname)
+  this.uname = uname
+}
 
 /**
  * 3、ES中类的继承：class extends, 本质上还是函数

@@ -12,7 +12,18 @@
        * 1、生成 HTTPRequest 实例
        * 2、建立连接 open (第三个参数表示是否异步)
        * 3、发送请求 send
-       * 4、根据状态判断处理数据 status
+       * 4、根据状态判断处理数据 status  --> onReadyStateChange，当readyState变化时，触发的函数
+       *    readyState: 0 请求未初始化
+       *                1 服务器连接已经建立
+       *                2 请求已接收
+       *                3 请求处理中
+       *                4 请求已完成，相应已就绪
+       *    status: 1xx
+       *            2xx
+       *            3xx
+       *            4xx
+       *            5xx
+       *    
        */
       function ajax(type, url, boolean) {
         return new Promise((resolve, reject) => {
