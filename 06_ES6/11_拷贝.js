@@ -44,3 +44,14 @@ function deepClone(newObj, oldObj) {
 
 deepClone(o, obj)
 
+// 浅拷贝：只拷贝第一层的数据，基本数据直接赋值，引用数据也是直接赋值，拷贝的内存地址
+function qianClone(obj) {
+    const newObj = {}
+
+    for(let key in obj) {
+        newObje[key] = obj[key]
+    }
+
+    return newObj
+}
+

@@ -1,5 +1,6 @@
+// 资料：https://www.jianshu.com/p/4efa7675834c
 /**
- * Set 数据结构：
+ * Set 数据结构：数组结构，但是成员是唯一且有序的（用来去重）
  *  1、配合new使用
  *  2、add(value), 添加值
  *  3、has(value)  判断value是否是set中的成员
@@ -23,3 +24,15 @@ var arr = [1,3,2,4,3,,5,6,2,3,1]
 
 var a = [...new Set(arr)]
 var b = Array.from(new Set(arr))
+
+/**
+ * weakSet:
+ */
+
+/**
+ * map
+ */
+
+/**
+ * weakMap
+ */
