@@ -56,7 +56,7 @@ btn.onclick = function() {
   this.disable = true // this --> btn
 
   setTimeout(function(){
-    this.disable = false // this --> window
+    this.disable = false // this --> window，因为这儿内部的this默认是指向window的
   }.bind(this), 3000) // 通过bind绑定，可以将内部的this指向为btn, 而且可以延迟执行
 };
 

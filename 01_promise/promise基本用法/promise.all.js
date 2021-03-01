@@ -1,5 +1,3 @@
-import { resolve } from "url"
-
 /**
  * Pormise.all 批次执行
  */
@@ -18,5 +16,5 @@ let p2 = new Promise(resolve => {
 })
 
 Promise.all([p1, p2], res => {
-  console.log('121212', res)
+  console.log('121212', res) // res是个数组，表示的是p1, p2的值组成的数组
 })
