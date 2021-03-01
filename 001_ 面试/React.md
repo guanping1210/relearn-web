@@ -6,6 +6,11 @@ https://zhuanlan.zhihu.com/p/57544233
 - 虚拟 DOM 是真实 DOM 在内存中的表示，用对象来表示的。UI 用以对象的形式保存在内存中，并与实际 DOM 同步。
 - 这是一个发生在渲染函数被调用和元素在屏幕上显示之间的步骤，整个过程称为调和
 
+#### 双缓冲技术 --> 维护了两棵树
+
+- 一颗是 fiber 树用于渲染页面
+- 一颗是 workInprogress fiber 树，用于在内存中构建，然后在构建完成时直接替换用于渲染页面的 fiber 树
+
 #### 类组件和函数组件之间的区别是什么？
 
 - 类组件可以使用其他特性，例如状态 state 和生命周期钩子
@@ -83,11 +88,11 @@ https://zhuanlan.zhihu.com/p/57544233
 
 #### 在构造函数调用 super 并将 props 作为参数传入的作用是啥？
 
-- 在调用 super() 方法之前，子类构造函数无法使用 this 应用，ES6 字类也是如此。
+- 在调用 super() 方法之前，子类构造函数无法使用 this 应用，ES6 子类也是如此。
 - 将 props 传递给 super()调用的主要原因是子构造函数中能够通过 this.props 来获取传入的 props
-- 字类在继承父类时，如果不执行 super，那么子类的 this 是无法使用的
+- 子类在继承父类时，如果不执行 super，那么子类的 this 是无法使用的
 
-- ES6 的限制，ES6 中类的继承必须先调用 super()方, 因为子类没有自己的 this，而是继承父类的 this 对象，然后对其加供，而 super 就代表了父类的构造函数
+- ES6 的限制，ES6 中类的继承必须先调用 super()方, 因为子类没有自己的 this，而是继承父类的 this 对象，然后对其加工，而 super 就代表了父类的构造函数
 
 #### 什么是受控组件
 
@@ -176,17 +181,23 @@ https://zhuanlan.zhihu.com/p/57544233
 - Fiber 能够将渲染工作分成块，并将其分散到多个帧中
 
 - Fiber 是个对象，主要由以下组成：
+
   - 自身的信息：tag（组件类型）、key、elementType、index...
   - 相关节点信息：return(父节点)、sibling(兄弟节点)
   - 指向自己的第一个子节点：child
   - 新的 props: pendingProps
   - 上一次渲染完的 props: memoizedProps
   - 上一次渲染时的 state: memoizedState
-  - fiber 对应的组件产生的 update 放在这个队列：updateQueue
+  - fiber 对应的组件产生的 update 放在这个队列：updateQueue，存储多次更新行为
   - 副作用信息：effectTag -> 这儿指的是对组件执行的操作，更新、删除、修改、移动 --> 用二进制，能够同时用一个数据，表达多种操作
   - 记录下一个副作用: nextEffect
   - 子树中的第一个 side effect: firstEffect
   - 子树中的最后一个 side effect: lastEffect
+
+- useState hook 结构
+  - memoizedState: 记录当前 state 应该返回的结果
+  - query： 缓存队列，存储多次更新行为, 是一个环形链表，每次插入新 update 时，原来的 first 指向 query.last.next, update 指向 query.next, 再讲 query.last 指向 update
+  - next: 指向下一次 useSttae 对应的 hook 对象
 
 #### 渲染流程 --> 源码书籍资料 https://react.jokcy.me/book
 
@@ -223,7 +234,7 @@ app.child -> A.child -> a.child
 
 babel -> 将 jsx 转为 VDOM
 ReactDOM.render -> 接收 VDOM 和 root dom, 然后
-创建 fiberRoot 节点，进入调和阶段（疑问：fiberRoot 节点，是先全部创建为 fiber 树之后，再进入调和阶段，还是创建一个 root 之后就开始调和了，然后其他的 fiber 节点，是调和过程创建的吗）
+创建 fiberRoot 节点，进入调和阶段（第一次只创建一个 rootfiber 节点，后续的是在调和阶段创建的）
 调和阶段分为两个阶段 render 阶段和 commit 阶段（针对单个 fiber 节点概述）
 render 阶段：
 --> render 阶段就是深度优先遍历 fiber 节点，直到遍历到叶子节点为止，从上往下的过程中会搭建子节点、收集记录 effectTag、记录 props 和 state 相关的更新，有声明周期函数的执行狗子函数
@@ -627,7 +638,7 @@ class ErrorBoundary extends React.Component {
 - 状态更新，肉眼看不见。更新到 UI 上时，才能看见
 - useEffect，是在每次更新 DOM 后执行，卸载 effect 也是每次重新渲染就卸载，而不是卸载组件时才卸载
 
-#### react 怎么知道组件内部，哪个 state 对应哪个 useState --> 按照 hook 的调用顺序
+#### react 怎么知道组件内部，哪个 state 对应哪个 useState --> 按照 hook 的调用顺序（队列）
 
 - 只有 hooks 的调用顺序保持一致，react 就能将内部 state 和对应的 hooks 进行关联
 - 如果将一个 hook 写在条件判断中，那么这个 hook 和 state 的顺序就对应不上
@@ -647,3 +658,5 @@ class ErrorBoundary extends React.Component {
 ```
 
 #### 精读资料 https://juejin.cn/post/6844903854174109703#heading-2
+
+#### 源码阅读 https://www.yuque.com/docs/share/fdb15ab1-dc44-488f-bbc8-9e26d89e58e5
