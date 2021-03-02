@@ -20,7 +20,7 @@ getName.call(person) // 表示是person调用的getName，打印结果是gp
 Function.prototype.myCall = function() {
  const [ctx, ...args] = arguments // ctx表示this修改指向的对象值
  ctx.fn = this // 给ctx新增一个属性，指向this，而这个this，就是指向当前这个函数
- const res = ctx.fn(...args) // 执行这个函数，函数可能有返回值
+ const res = ctx.fn(...args) // 执行这个函数，函数可能有返回值 --> 核心就是对象上的一个属性执行了，就表示把this指向了这个对象
  
  delete ctx.fn // 删除新增的fn属性值
  return res
@@ -72,6 +72,7 @@ Function.prototype.myBind = function() {
     const self = this // 这里的this指向声明的函数，声明的函数是Function的实例
 
     const fnOP = function(){}
+
     const fn = function() {
         self.apply(this instanceof fn ? this : ctx, args.concat(arguments)) // this instanceof fn，能够判断是不是使用了new，作为构造函数使用了。如果作为构造函数使用了，那么这个this是指向实例的
     }
