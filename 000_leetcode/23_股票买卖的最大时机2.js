@@ -1,4 +1,5 @@
 /**
+ * 不限定买卖次数：
  * 股票买卖的最大时机2: 可以多次买入和卖出,但是下一次买入必须在上一次卖出之后
  *  输入：[7,1,5,3,6,4]
  *  输出：7
@@ -7,7 +8,7 @@
  * 然后第四天买入为3元，第五天卖出为6元，得到利润6-3=3，
  * 一共的利润为4+3
  * 
- * 找趋势，向上则在低端买入，向下时则在高点卖出
+ * 找趋势，向上则在低端买入，向下时则在高点卖出, 不限定买卖次数
  */
 function maxProfit(prices) {
     if(prices.length === 0) return 0
@@ -26,6 +27,20 @@ function maxProfit(prices) {
         peak = prices[i]
 
         maxProfit = (peak - valley) + maxProfit
+    }
+
+    return maxProfit
+}
+
+// 贪心算法：比较每天的利润 --> 不限定次数
+function maxProfit(prices) {
+    if(prices.length === 0) return 0
+    let maxProfit = 0
+
+    for(let i = 1; i < prices.length; i ++) {
+        if(prices[i] < prices[i + 1]) {
+            maxProfit += prices[i+1] - prices[i]
+        }
     }
 
     return maxProfit
