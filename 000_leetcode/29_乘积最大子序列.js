@@ -4,5 +4,15 @@
  *  输出：6                 0
  */
 function maxProduct(nums) {
+    const maxProductMemo = []
+    const minProductMemo = []
 
+    maxProductMemo[0] = nums[0]
+    minProductMemo[0] = nums[0]
+
+    let max = nums[0]
+
+    for(let i = 1; i < nums.length; i ++) {
+
+    }
 }
