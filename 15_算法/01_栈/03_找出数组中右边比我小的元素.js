@@ -34,5 +34,11 @@ findRightSmall([1,2,3,4,0,6])
  * 思考：需要把内层循环想办法去掉，用别的方式来代替 --> 把从左到右遍历两次设想为，从右往左遍历，这样得到的就是当前数与左边的数比较谁第一个大
  */
 function findRightSmall2(nums) {
-    
+    const stack = []
+
+    for(let i = nums.length - 1; i >= 0; i --) {
+        if() {
+            
+        }
+    }
 }

@@ -20,4 +20,6 @@ function findSmallSeq(nums, k) {
             stack.push(nums[i])
         }
     }
+
+    
 }
