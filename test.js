@@ -35,3 +35,7 @@ var calculate = function(s) {
 };
 
 calculate('1 +(9 - 1)')
+
+var getKthFromEnd = function(head, k) {
+    
+};

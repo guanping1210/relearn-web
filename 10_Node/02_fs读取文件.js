@@ -35,3 +35,12 @@ fs.writeFile('./data/test.md', 'nice to meet u', function(err) {
  *  获取文件信息：stat
  *      
  */
+
+/**
+ * 1、通过模块的名字对模块进行引入
+ *  const xxx = require('xxx')
+ * 2、调用模块暴露出来的API
+ *  xxx.yyy, 表示要执行yyy方法
+ * 
+ * 因为读取文件是需要一定的时间的，所以不能在后面立刻拿到结果，而是要通过回调函数来拿到
+ */
