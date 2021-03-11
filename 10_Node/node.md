@@ -76,29 +76,33 @@ console.log(url) // a\b
 #### nodejs 中的所有回调函数，第一个参数都是 err，也就是错误优先
 
 #### package.json --> 记录依赖模块以及模块版本
+
 - scripts , 记录的命令别名
 - dependencies, 依赖，开发环境和生产环境共用的依赖
 - devDependencies, 开发环境特有的依赖
 
 #### package-lock.json --> 锁定包版本、加快下载速度
 
-#### nodejs中模块的加载机制 --> commonjs
+#### nodejs 中模块的加载机制 --> commonjs
+
 - 查找规则：当模块拥有路径但没有后缀时
-  - require根据模块路径查找模块，如果是完整路径，直接引入模块
-  - 后缀省略，则先找同名JS文件再找同名JS文件夹
-  - 找到同名文件夹，找文件夹中的index.js
-  - 如果文件夹中的index.js找不到，会去当前文件夹中的package.json文件中查找main选项的入口文件
+
+  - require 根据模块路径查找模块，如果是完整路径，直接引入模块
+  - 后缀省略，则先找同名 JS 文件再找同名 JS 文件夹
+  - 找到同名文件夹，找文件夹中的 index.js
+  - 如果文件夹中的 index.js 找不到，会去当前文件夹中的 package.json 文件中查找 main 选项的入口文件
   - 如果还找不到，就报错，表示模块没有找到
 
 - 查找规则：当模块没有路径且没有后缀时
-  - nodejs会假设它是系统模块，然后去node_modules文件中中查找
-  - 找是否有同名文件夹，有的话查找里面是否有index.js
-  - 没有index.js，就查看该文件夹中的package.json中的main来确定入口
+  - nodejs 会假设它是系统模块，然后去 node_modules 文件中中查找
+  - 找是否有同名文件夹，有的话查找里面是否有 index.js
+  - 没有 index.js，就查看该文件夹中的 package.json 中的 main 来确定入口
   - 还找不到，就报错
 
-
 #### 服务端基础概念
-- URL，统一资源定位符，是专为识别Internet网上资源位置而设的一种编码方式
+
+- URL，统一资源定位符，是专为识别 Internet 网上资源位置而设的一种编码方式
+
 ```
   URL 的组成：
     传输协议://IP地址:端口号/资源位置
@@ -106,5 +110,43 @@ console.log(url) // a\b
     http: 超文本传输协议，提供来一种发布和接收HTML页面的方法
 ```
 
-#### 创建web服务器
+#### 创建 web 服务器
 
+- http 模块 --> http.createServer(), 新建服务器
+
+#### http 协议 --> 客户端与服务端沟通的规范 --> 超文本传输协议
+
+- 报文：在 http 请求和响应的过程中传递的数据块，包括要传送的数据和一些附加信息，并且要遵循规定好的格式
+- 请求报文 request
+  - 请求方式 get\post...
+  - 其他设置
+- 响应报文 response
+
+#### 路由 --> 客户端请求地址与服务器端代码的对应关系，请求什么就响应什么
+
+#### 静态资源 --> 相同的请求得到相同的响应资源（例如图片啊这些，地址一般不会变动）
+
+#### 动态资源 --> 相同的请求不同的响应资源
+
+#### 异步编程
+
+- 同步 API：path、url, 当前 API 执行完毕才能执行下一个 API
+
+  ```
+  console.log('before')
+  console.log('after')
+
+  // before -> after
+  ```
+
+- 异步 API: fs..., 当前 API 的执行不会阻塞后续 API 的执行
+
+  ```
+  console.log('before')
+  setTimeout(() =>{
+    console.log('last)
+  }, 2000)
+  console.log('after)
+
+  // before -> after -> last
+  ```
