@@ -45,3 +45,23 @@ console.log(
 /**
  * 组合业务规则方面，比较经典的就是表单的验证方法
  */
+let errorMsgs = {
+  default: '输入数据格式不正确',
+  minLength: "输入数据长度不足",
+  isNumber: '请输入数字',
+  required: '内容不为空'
+}
+
+// 规则集合
+var rules = {
+  minLength: function(value, length, errorMsg) {
+    if(value.length < length) {
+      return errorMsg || errorMsgs['minLength']
+    }
+  },
+  isNumber: function(value, errorMsg) {
+    if(!/\d+/g.test(value)) {
+      return errorMsg || errorMsgs['required']
+    }
+  }
+}

@@ -8,7 +8,7 @@ function sendMsg(msg) {
 function proxySendMsg(msg) {
   // 无消息直接返回
   if(typeof msg === 'undefined') {
-    retrun 
+    return 
   }
 
   // 有消息则进行过滤
@@ -44,4 +44,32 @@ function debounce(fn, delay) {
 }
 
 // 缓存代理：可以为一些开销大的运算结果提供暂时的缓存，提升效率
+// 缓存加法
+function add() {
+  let arg = [].slice.call(arguments)
+  return arg.reduce(function(a, b) {
+    return a + b
+  })
+}
+// 代理
+let proxyAdd = (function() {
+  let cache = []
+
+  return function() {
+    let arg = [].slice.call(arguments).join(',')
+
+    // 如果有，直接从缓存返回
+    if(cache[arg]) {
+      return cache[arg]
+    } else {
+      let ret = add.apply(this, arguments)
+      return ret
+    }
+  }
+})()
+
+console.log(
+  add(1,2,3,4), // 10
+  proxyAdd(10,20,30,40) // 100
+)
 
