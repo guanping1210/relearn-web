@@ -178,3 +178,88 @@ var partition = function(head, x) {
     
     return dummy.next
 }
+
+// 设计hash表 --> 目前是二维数组，看能否用一维数组来实现
+var MyHashMap = function() {
+    this.hash = []
+};
+
+/**
+ * value will always be non-negative. 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+MyHashMap.prototype.put = function(key, value) {
+    const index = this.hash.findIndex(item => item[0] === key)
+    if(index === -1) {
+        this.hash.push([key, value])
+    } else {
+        this.hash.splice(index, 1, [key, value])
+    }
+};
+
+/**
+ * Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key 
+ * @param {number} key
+ * @return {number}
+ */
+MyHashMap.prototype.get = function(key) {
+    const index = this.hash.findIndex(item => item[0] === key) 
+
+    return index === -1 ? -1 : this.hash[index][1]
+};
+
+/**
+ * Removes the mapping of the specified value key if this map contains a mapping for the key 
+ * @param {number} key
+ * @return {void}
+ */
+MyHashMap.prototype.remove = function(key) {
+    const index = this.hash.findIndex(item => item[0] === key)
+
+    if(index !== -1) {
+        this.hash.splice(index, 1)
+        return this.hash
+    }
+
+    return -1
+};
+
+var hash = new MyHashMap()
+hash.put(1,1)
+console.log(hash)
+
+
+// 返回链表入环的第一个节点
+// 
+var detectCycle = function(head) {
+    if(head === null) {
+        return null
+    }
+    let slow = head, fast = head
+
+    while(fast !== null) {
+        slow = slow.next
+
+        if(fast.next !== null) {
+            fast = fast.next.next
+        } else {
+            return null
+        }
+
+        if(fast === slow) {
+            let ptr = head
+            while(ptr !== slow) {
+                ptr = ptr.next
+                slow = slow.next
+            }
+
+            return ptr
+        }
+    }
+
+    return null
+}
+
+// 重排链表
