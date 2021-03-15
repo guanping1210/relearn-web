@@ -29,11 +29,18 @@
  * 
  *  3、无埋点 --> 前端自动采集全部事件，上报埋点数据，由后端过滤和计算得出数据 --> GrowingID、神策、Sentry
  *  
- * 埋点思路：
- *  1、点击事件：监听document.body上的点击事件，或者监听事件捕获
- *  2、获取平台信息，上报
- *  3、如何捕获接口信息：
+ * 捕获信息思路：
+ *  1、捕获全局JS错误：重写window.onerror | unhandledrejection | console.error 方法
+ *      onerror 获取不到跨域的script的错误：给script标签设置 crossorigin 属性
+ *      console.error 方法能够比较全面的捕获到错误
+ *      unhandledrejection 可以捕获到promise的错误
  * 
- * sentry源码分析：https://cloud.tencent.com/developer/article/1601166
- *  1、
+ *  2、捕获API接口请求：核心都是基于XMLHttpRequest，所以给XMLHttpRequest添加监听事件；重写fetch方法
+ *  3、计算静态资源加载：检测error，然后看是否是加载的错误
+ *  4、得出渲染效率：performance相关的API，可以获得首次加载的性能数据, dns, tcp, 白屏时间等
+ *  5、用户行为：点击、停留时间等
+ * 
+ * 前端如何获取设备信息：navigator， 移动端可能还需要另外想办法获取额外的信息
+ *  navigator.appVersion: 能够获取到系统信息，浏览器版本，内核等信息
+ *  
  */
