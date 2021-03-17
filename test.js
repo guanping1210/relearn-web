@@ -262,4 +262,40 @@ var detectCycle = function(head) {
     return null
 }
 
-// 重排链表
+/**
+ * @param {string} S
+ * @return {string}
+ */
+ var removeOuterParentheses = function(S) {
+    let count = 0, ans = '';
+    for (let i = 0; i < S.length; i++) {
+        if(S[i] === '(' && count++ > 0) ans += '('
+        if(S[i] === ')' && count-- > 1) ans += ')';
+    }
+    return ans;
+};
+
+function buildArray(target, n) {
+    const stack = []
+
+    for(let i = 1, j = 0; i <= n && j < target.length; i ++) {
+        if(i === target[j]) {
+            stack.push('push')
+            j ++
+        } else {
+            stack.push('push')
+            stack.push('pop')
+        }
+    }
+
+    return stack
+}
+
+
+var makeGood = function(s) {
+    let ss = ''
+
+    for(let i = 0; i < s.length; i ++) {
+        
+    }
+};
