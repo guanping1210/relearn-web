@@ -291,11 +291,164 @@ function buildArray(target, n) {
     return stack
 }
 
+/**
+ * ../ 表示移动到当前文件夹的父文件夹
+ * ./ 表示停留在当前文件夹
+ * x/ 表示移动到名为x的子文件夹
+ * @param {*} logs 
+ */
+var minOperations = function(logs) {
+    const stack = []
 
-var makeGood = function(s) {
-    let ss = ''
+    for(let i = 0; i < logs; i ++) {
+        if(logs[i] !== './' && logs[i] !== '../') {
+            stack.push(logs[i])
+        } else if (logs[i] === '../') {
+            stack.pop()
+        }
+    }
 
-    for(let i = 0; i < s.length; i ++) {
-        
+    return stack.length
+};
+
+/**
+ * 维护一个辅助栈，辅助栈的下标与原始栈下标一一对应，但是辅助栈中每个下标存放的是原始栈作为栈顶时的最小值
+ */
+var MinStack = function() {
+    this.stack = []
+    this.minStack = []
+};
+MinStack.prototype.push = function(x) {
+    this.stack.push(x)
+
+    if(this.minStack.length === 0) {
+        this.minStack.push(x)
+    } else {
+        this.minStack.push(Math.min(x, this.getMin()))
     }
 };
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    this.stack.pop()
+    this.minStack.pop()
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.stack[this.stack.length - 1]
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.minStack[this.minStack.length - 1]
+};
+
+var reverseBetween = function(head, left, right) {
+    // 因为头节点有可能发生变化，使用虚拟头节点可以避免复杂的分类讨论
+    const dummyNode = new ListNode(-1);
+    dummyNode.next = head;
+
+    let pre = dummyNode;
+    // 第 1 步：从虚拟头节点走 left - 1 步，来到 left 节点的前一个节点
+    // 建议写在 for 循环里，语义清晰
+    for (let i = 0; i < left - 1; i++) {
+        pre = pre.next;
+    }
+
+    // 第 2 步：从 pre 再走 right - left + 1 步，来到 right 节点
+    let rightNode = pre;
+    for (let i = 0; i < right - left + 1; i++) {
+        rightNode = rightNode.next;
+    }
+
+    // 第 3 步：切断出一个子链表（截取链表）
+    let leftNode = pre.next;
+    let curr = rightNode.next;
+
+    // 注意：切断链接
+    pre.next = null;
+    rightNode.next = null;
+
+    // 第 4 步：同第 206 题，反转链表的子区间
+    reverseLinkedList(leftNode);
+
+    // 第 5 步：接回到原来的链表中
+    pre.next = rightNode;
+    leftNode.next = curr;
+    return dummyNode.next;
+};
+
+const reverseLinkedList = (head) => {
+    let pre = null;
+    let cur = head;
+
+    while (cur) {
+        const next = cur.next;
+        cur.next = pre;
+        pre = cur;
+        cur = next;
+    }
+}
+
+/**
+ * 反转指定位置的链表 reverseBetween
+ * 
+ * head = [1,2,3,4,5] left = 2, right = 4
+ * 最后结果：[1,4,3,2,5]
+ */
+function reverseBetween(head, left, right) {
+    let dummy = new ListNode()
+    dummy.next = head
+
+    let pre = dummy
+
+    for(let i = 0; i < left - 1; i ++) {
+        pre = pre.next
+    }
+    // 经过第一个for循环之后，pre是left位置的前一个节点 --> pre.val = 1
+
+    let rightNode = pre
+    for(let i = 0; i < right - left + 1; i ++) {
+        rightNode = rightNode.next
+    }
+
+    // 经过第二个for循环之后，rightNode表示的是right位置的节点 --> rightNode.val = 4
+
+    // 得到中间需要反转的部分 [2,3,4]
+    let leftNode = pre.next
+    let curr = rightNode.next // curr.val = 5
+
+    // 需要切断左右两头 --> 可能这时候得到的就是[2,3,4] 部分，两头都为空了
+    pre.next = null
+    rightNode.next = null
+
+    // 对leftNode进行反转
+    function reverse(head) {
+        let p = null, curr = head
+
+        while(curr !== null) {
+            const next = curr.next
+            curr.next = p
+            p = curr
+            curr = next
+        }
+    }
+
+    reverse(leftNode)
+
+    // 将切断的部分重新连接起来 --> 这儿为什么是连接rightNode呢
+    leftNode.next = curr
+    pre.next = rightNode
+
+    return dummy.next
+}
+
+
+
