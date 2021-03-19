@@ -450,5 +450,54 @@ function reverseBetween(head, left, right) {
     return dummy.next
 }
 
+/**
+ * 数据流中的第K大元素 --> 循环遍历一遍
+ */
+ var KthLargest = function(k, nums) {
+    this.max = nums.slice(0,k)
+    this.nums = nums
+
+    this.max.sort((a,b) => a-b) // 构建一个长度为K的数组，按照从小到大排序
+
+    for(let i = k-1; i < nums.length; i ++) {
+        if(nums[i] > this.max[this.max.length]) {
+            this.max.shift()
+            this.max.push(nums[i])
+        }
+    }
+};
+KthLargest.prototype.add = function(val) {
+    this.nums.push(val)
+
+    if(val > this.max[0]) {
+        
+    }
+}
+
+/**
+ * 查找最小的K个数
+ * @param {*} arr 
+ * @param {*} k 
+ */
+var getLeastNumbers = function(arr, k) {
+    const min = arr.slice(0, k)
+    min.sort()
+
+    for(let i = k - 1; i < arr.length; i ++) {
+        if(arr[i] < min[0]) {
+            min.pop()
+            min.unshift(arr[i])
+            min.sort()
+        } else if(arr[i] <= min[min.length - 1]) {
+            min.pop()
+            min.push(arr[i])
+            min.sort()
+        } 
+    }
+
+    return min
+};
+    
+
 
 
