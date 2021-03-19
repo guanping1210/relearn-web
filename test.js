@@ -443,7 +443,7 @@ function reverseBetween(head, left, right) {
 
     reverse(leftNode)
 
-    // 将切断的部分重新连接起来 --> 这儿为什么是连接rightNode呢
+    // 将切断的部分重新连接起来 --> 这儿为什么是连接rightNode呢, 因为最后rightNode被反过来了。。也就是被翻转过来了
     leftNode.next = curr
     pre.next = rightNode
 
