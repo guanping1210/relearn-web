@@ -497,7 +497,82 @@ var getLeastNumbers = function(arr, k) {
 
     return min
 };
-    
+
+/**
+ * 找数组交集，但是不能去除重复的
+ * num1 = [1,2,2,1], num2=[2,2], 输出[2,2]
+ * [4, 9, 5],[9, 9,5, 8, 4], 输出[4,9,5]
+ * 好像题意搞错了：不在乎顺序，能找到合集就行
+ */ 
+ var intersect = function(nums1, nums2) {
+    var pos, arr = []
+
+    for(let i = 0;i < nums1.length; i ++) {
+        pos = nums2.indexOf(nums1[i])
+
+        if(pos > -1) {
+            nums2.splice(pos, 1)
+            arr.push(nums1[i])
+        }
+    }
+
+    return arr
+};
+
+// intersect([1], [1])
+// intersect([1,1], [1,2])
+intersect([4,9,5], [9,4,9,8,4])
+
+/**
+ * 奇偶排序：一半是奇数，一半是偶数
+ * 当A[i]为奇数时，i也是奇数；A[i]为偶数时，i也是偶数
+ * 
+ * 思路：用指针，一个指针往前走，一个指针用来记录交换的位置
+ */
+var sortArrayByParityII = function(nums) {
+    function isRight(index) {
+        return index % 2 === 0 && nums[index] % 2 === 0 || index % 2 === 1 && nums[index] % 2=== 1
+    }
+
+    for(let i = 0; i < nums.length; i ++) {
+        if(isRight(i)) {
+            i ++
+        } else {
+            // 需要找到后面需要交换的值
+            let p = i + 1
+
+            while(p < nums.length) {
+                if(!isRight(p)) { // 需要交换
+                    [nums[i], nums[p]] = [nums[p], nums[i]] // 交换数据
+                    i = p
+                    break
+                } else {
+                    p ++
+                }
+            }
+        }
+    }
+
+    return nums
+};
+
+/**
+ * 三角形的最大周长：三角形三边不为0，然后两个边之和大于第三边，之差小于等于第三边
+ * 
+ * 能够构成三角形的条件：任意两个边之和大于第三边，之差小于第三边
+ * 
+ * 思路：感觉要先排个序呢
+ */
+ var largestPerimeter = function(nums) {
+    nums.sort()
+    let max = 0
+};
+
+[2,1,2] //5
+[1,2,1] // 0
+[3,2,3,4] // 10
+[3,6,2,3] // 8
+
 
 
 

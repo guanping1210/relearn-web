@@ -7,6 +7,60 @@
     <title>Document</title>
   </head>
   <body>
-    <script src="./test.js"></script>
+    <!-- <script src="./test.js"></script> -->
+    <script>
+      var sortArrayByParityII = function (nums) {
+        function isRight(index) {
+          return (
+            (index % 2 === 0 && nums[index] % 2 === 0) ||
+            (index % 2 === 1 && nums[index] % 2 === 1)
+          );
+        }
+
+        for (let i = 0; i < nums.length; i++) {
+          if (!isRight(i)) {
+            let p = i + 1;
+            while (p < nums.length) {
+              if (!isRight(p)) {
+                // 需要交换
+                [nums[i], nums[p]] = [nums[p], nums[i]]; // 交换数据
+                i = p; // 移动指针
+                break;
+              } else {
+                p++;
+              }
+            }
+          }
+        }
+
+        return nums;
+      };
+
+      // console.log(sortArrayByParityII([4, 2, 5, 7]));
+      // console.log(sortArrayByParityII([4, 1, 2, 5, 7, 8]));
+
+      // [648,831,560,997,192,897,986,829,424,843]
+      console.log(
+        sortArrayByParityII([648, 831, 560, 986, 192, 424, 997, 829, 897, 843])
+      );
+
+      const swap = (A, i, j) => {
+        [A[i], A[j]] = [A[j], A[i]];
+      };
+      var sortArrayByParityII = function (A) {
+        const n = A.length;
+        let j = 1;
+        for (let i = 0; i < n; i += 2) {
+          if (A[i] & 1) {
+            // 10 & 1 = 0  9 & 1 = 1
+            while (A[j] & 1) {
+              j += 2;
+            }
+            swap(A, i, j);
+          }
+        }
+        return A;
+      };
+    </script>
   </body>
 </html>
