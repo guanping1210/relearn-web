@@ -262,4 +262,317 @@ var detectCycle = function(head) {
     return null
 }
 
-// 重排链表
+/**
+ * @param {string} S
+ * @return {string}
+ */
+ var removeOuterParentheses = function(S) {
+    let count = 0, ans = '';
+    for (let i = 0; i < S.length; i++) {
+        if(S[i] === '(' && count++ > 0) ans += '('
+        if(S[i] === ')' && count-- > 1) ans += ')';
+    }
+    return ans;
+};
+
+function buildArray(target, n) {
+    const stack = []
+
+    for(let i = 1, j = 0; i <= n && j < target.length; i ++) {
+        if(i === target[j]) {
+            stack.push('push')
+            j ++
+        } else {
+            stack.push('push')
+            stack.push('pop')
+        }
+    }
+
+    return stack
+}
+
+/**
+ * ../ 表示移动到当前文件夹的父文件夹
+ * ./ 表示停留在当前文件夹
+ * x/ 表示移动到名为x的子文件夹
+ * @param {*} logs 
+ */
+var minOperations = function(logs) {
+    const stack = []
+
+    for(let i = 0; i < logs; i ++) {
+        if(logs[i] !== './' && logs[i] !== '../') {
+            stack.push(logs[i])
+        } else if (logs[i] === '../') {
+            stack.pop()
+        }
+    }
+
+    return stack.length
+};
+
+/**
+ * 维护一个辅助栈，辅助栈的下标与原始栈下标一一对应，但是辅助栈中每个下标存放的是原始栈作为栈顶时的最小值
+ */
+var MinStack = function() {
+    this.stack = []
+    this.minStack = []
+};
+MinStack.prototype.push = function(x) {
+    this.stack.push(x)
+
+    if(this.minStack.length === 0) {
+        this.minStack.push(x)
+    } else {
+        this.minStack.push(Math.min(x, this.getMin()))
+    }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    this.stack.pop()
+    this.minStack.pop()
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.stack[this.stack.length - 1]
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+    return this.minStack[this.minStack.length - 1]
+};
+
+var reverseBetween = function(head, left, right) {
+    // 因为头节点有可能发生变化，使用虚拟头节点可以避免复杂的分类讨论
+    const dummyNode = new ListNode(-1);
+    dummyNode.next = head;
+
+    let pre = dummyNode;
+    // 第 1 步：从虚拟头节点走 left - 1 步，来到 left 节点的前一个节点
+    // 建议写在 for 循环里，语义清晰
+    for (let i = 0; i < left - 1; i++) {
+        pre = pre.next;
+    }
+
+    // 第 2 步：从 pre 再走 right - left + 1 步，来到 right 节点
+    let rightNode = pre;
+    for (let i = 0; i < right - left + 1; i++) {
+        rightNode = rightNode.next;
+    }
+
+    // 第 3 步：切断出一个子链表（截取链表）
+    let leftNode = pre.next;
+    let curr = rightNode.next;
+
+    // 注意：切断链接
+    pre.next = null;
+    rightNode.next = null;
+
+    // 第 4 步：同第 206 题，反转链表的子区间
+    reverseLinkedList(leftNode);
+
+    // 第 5 步：接回到原来的链表中
+    pre.next = rightNode;
+    leftNode.next = curr;
+    return dummyNode.next;
+};
+
+const reverseLinkedList = (head) => {
+    let pre = null;
+    let cur = head;
+
+    while (cur) {
+        const next = cur.next;
+        cur.next = pre;
+        pre = cur;
+        cur = next;
+    }
+}
+
+/**
+ * 反转指定位置的链表 reverseBetween
+ * 
+ * head = [1,2,3,4,5] left = 2, right = 4
+ * 最后结果：[1,4,3,2,5]
+ */
+function reverseBetween(head, left, right) {
+    let dummy = new ListNode()
+    dummy.next = head
+
+    let pre = dummy
+
+    for(let i = 0; i < left - 1; i ++) {
+        pre = pre.next
+    }
+    // 经过第一个for循环之后，pre是left位置的前一个节点 --> pre.val = 1
+
+    let rightNode = pre
+    for(let i = 0; i < right - left + 1; i ++) {
+        rightNode = rightNode.next
+    }
+
+    // 经过第二个for循环之后，rightNode表示的是right位置的节点 --> rightNode.val = 4
+
+    // 得到中间需要反转的部分 [2,3,4]
+    let leftNode = pre.next
+    let curr = rightNode.next // curr.val = 5
+
+    // 需要切断左右两头 --> 可能这时候得到的就是[2,3,4] 部分，两头都为空了
+    pre.next = null
+    rightNode.next = null
+
+    // 对leftNode进行反转
+    function reverse(head) {
+        let p = null, curr = head
+
+        while(curr !== null) {
+            const next = curr.next
+            curr.next = p
+            p = curr
+            curr = next
+        }
+    }
+
+    reverse(leftNode)
+
+    // 将切断的部分重新连接起来 --> 这儿为什么是连接rightNode呢, 因为最后rightNode被反过来了。。也就是被翻转过来了
+    leftNode.next = curr
+    pre.next = rightNode
+
+    return dummy.next
+}
+
+/**
+ * 数据流中的第K大元素 --> 循环遍历一遍
+ */
+ var KthLargest = function(k, nums) {
+    this.max = nums.slice(0,k)
+    this.nums = nums
+
+    this.max.sort((a,b) => a-b) // 构建一个长度为K的数组，按照从小到大排序
+
+    for(let i = k-1; i < nums.length; i ++) {
+        if(nums[i] > this.max[this.max.length]) {
+            this.max.shift()
+            this.max.push(nums[i])
+        }
+    }
+};
+KthLargest.prototype.add = function(val) {
+    this.nums.push(val)
+
+    if(val > this.max[0]) {
+        
+    }
+}
+
+/**
+ * 查找最小的K个数
+ * @param {*} arr 
+ * @param {*} k 
+ */
+var getLeastNumbers = function(arr, k) {
+    const min = arr.slice(0, k)
+    min.sort()
+
+    for(let i = k - 1; i < arr.length; i ++) {
+        if(arr[i] < min[0]) {
+            min.pop()
+            min.unshift(arr[i])
+            min.sort()
+        } else if(arr[i] <= min[min.length - 1]) {
+            min.pop()
+            min.push(arr[i])
+            min.sort()
+        } 
+    }
+
+    return min
+};
+
+/**
+ * 找数组交集，但是不能去除重复的
+ * num1 = [1,2,2,1], num2=[2,2], 输出[2,2]
+ * [4, 9, 5],[9, 9,5, 8, 4], 输出[4,9,5]
+ * 好像题意搞错了：不在乎顺序，能找到合集就行
+ */ 
+ var intersect = function(nums1, nums2) {
+    var pos, arr = []
+
+    for(let i = 0;i < nums1.length; i ++) {
+        pos = nums2.indexOf(nums1[i])
+
+        if(pos > -1) {
+            nums2.splice(pos, 1)
+            arr.push(nums1[i])
+        }
+    }
+
+    return arr
+};
+
+// intersect([1], [1])
+// intersect([1,1], [1,2])
+intersect([4,9,5], [9,4,9,8,4])
+
+/**
+ * 奇偶排序：一半是奇数，一半是偶数
+ * 当A[i]为奇数时，i也是奇数；A[i]为偶数时，i也是偶数
+ * 
+ * 思路：用指针，一个指针往前走，一个指针用来记录交换的位置
+ */
+var sortArrayByParityII = function(nums) {
+    function isRight(index) {
+        return index % 2 === 0 && nums[index] % 2 === 0 || index % 2 === 1 && nums[index] % 2=== 1
+    }
+
+    for(let i = 0; i < nums.length; i ++) {
+        if(isRight(i)) {
+            i ++
+        } else {
+            // 需要找到后面需要交换的值
+            let p = i + 1
+
+            while(p < nums.length) {
+                if(!isRight(p)) { // 需要交换
+                    [nums[i], nums[p]] = [nums[p], nums[i]] // 交换数据
+                    i = p
+                    break
+                } else {
+                    p ++
+                }
+            }
+        }
+    }
+
+    return nums
+};
+
+/**
+ * 三角形的最大周长：三角形三边不为0，然后两个边之和大于第三边，之差小于等于第三边
+ * 
+ * 能够构成三角形的条件：任意两个边之和大于第三边，之差小于第三边
+ * 
+ * 思路：感觉要先排个序呢
+ */
+ var largestPerimeter = function(nums) {
+    nums.sort()
+    let max = 0
+};
+
+[2,1,2] //5
+[1,2,1] // 0
+[3,2,3,4] // 10
+[3,6,2,3] // 8
+
+
+
+
