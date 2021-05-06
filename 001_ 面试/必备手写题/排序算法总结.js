@@ -287,7 +287,7 @@ function shellSort(arr) {
 
 
 /**
- * 8、桶排序：基于计数排序的优化，将数组分到有线数量的桶里，然后对每个桶分别排序，最后将各桶中的数据有序的合并起来
+ * 8、桶排序：基于计数排序的优化，将数组分到有限数量的桶里，然后对每个桶分别排序，最后将各桶中的数据有序的合并起来
  *  过程：找出待排序数组中的最大值max，最小值min;
  *        使用动态数组作为桶，里面存放的数据，桶的数量为 (max-min) / arr.length - 1;
  *        遍历数组arr，计算每个元素arr[i]放的桶；
@@ -300,3 +300,22 @@ function shellSort(arr) {
  * 
  *  动画：https://pic4.zhimg.com/v2-3c7ddb59df2d21b287e42a7b908409cb_b.webp
  */
+
+function bucketSort(arr) {
+    if(arr.length <= 1) return arr
+
+    let i = 0
+    let minValue = arr[0], maxValue = arr[0]
+
+    // 找最大值、最小值
+    for(i = 1; i < arr.length; i ++) {
+        if(arr[i] < minValue) {
+            minValue = arr[i]
+        } else if(arr[i] > maxValue) {
+            maxValue = arr[i]
+        }
+    }
+
+    // 桶的初始化
+    var defaultBucketSize = 5 // 设置桶的默认数量
+}
