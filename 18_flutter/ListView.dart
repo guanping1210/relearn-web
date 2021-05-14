@@ -19,4 +19,20 @@ class ListView {
     ]
 }
 
-// 2、长列表，用于渲染大量数据，
+// 2、长列表，用于渲染大量数据，列表项滚动到屏幕上视图区的时候才创建该项
+final items = new List<String>.generate(10000, i => "item $i") // 创建数据
+
+new ListView.builder(
+  itemCount: items.length,
+  itemBuilder: (context, index) => {
+    return new ListTile(
+      title: new Text('${items[index]}')
+    )
+  }
+)
+
+// 3、Grid网格列表，使用 GridView widget
+new GridView.count(
+  
+)
+
