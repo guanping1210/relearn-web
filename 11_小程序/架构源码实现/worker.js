@@ -1,3 +1,5 @@
+// 逻辑层
+// 视图层和逻辑层相互通信，自己实现一套发布订阅
 let App = null
 let _event = null
 
@@ -6,8 +8,9 @@ importScripts('./event.js')
 
 // 用live-server 启动模拟服务，可以测试worker
 // test message
-onmessage = function(e) {
-  console.log('接收信息，', e)
+onmessage = function(data) {
+  console.log('接收信息，', data)
+  postMessage(data)
 }
 
 // 监听事件
@@ -29,3 +32,8 @@ onmessage = function(e) {
 //     })
 //   }
 // }
+
+function workerMessage(data) {
+  // 发送数据事件
+  postMessage(data)
+}
