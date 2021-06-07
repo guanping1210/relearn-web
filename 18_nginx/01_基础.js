@@ -80,4 +80,12 @@
  *  final: mac 安装 nginx
  * 
  *    -  brew install nginx 就可以啦
+ * 
+ * 
+ *  8、全局块：主要设置一些影响nginx服务器整体运行的配置指令，
+ *      包括用户、进程、经常PID，日志等
+ * 
+ *  9、events块：主要影响nginx服务器与用户的网络连接
+ * 
+ *  10、http块：包括http块和server块
  */
