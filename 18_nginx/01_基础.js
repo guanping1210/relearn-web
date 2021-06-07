@@ -88,4 +88,7 @@
  *  9、events块：主要影响nginx服务器与用户的网络连接
  * 
  *  10、http块：包括http块和server块
+ * 
+ *  11、查看开放端口号：firewall-cmd--list-all
+ *      新增开放端口号：firewall-cmd --add-port xxx
  */
