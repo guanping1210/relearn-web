@@ -9,6 +9,7 @@
  *  6、new Function
  *  7、不用var声明的变量，不会提升
  *  8、哪种for循环最快
+ *  9、JS 装饰器
  */
 
 //  1、this --> 普通函数：指向调用者 + 箭头函数：永远指向定义时的上下文 + 定时器：永远指向全局window/global
@@ -159,3 +160,45 @@ arr.forEach(v => v) // 大概1.829s
 
 for(const v of arr) {} // 大概16s
 console.timeEnd('start')
+
+/**
+ * 9、JS 装饰器： 用于修饰类、方法、属性的装饰，就是通过最简单的方式把一段代码与另一段代码包装在一起
+ *              通过把 @ 符号 放在代码的最前面，形成一种特殊的语法
+ */
+function fn(name) {
+    console.log(`hello, ${name}`)
+}
+
+function decorator(fn) {
+    return function() {
+        console.log('string')
+        const result = fn.apply(this, arguments)
+        console.log('finished')
+
+        return result 
+    }
+}
+
+// 此处的decorator 就将fn函数与日志包装到了一起，就是一个简单的装饰器
+const wrapped = decorator(fn)
+
+fn('jack') 
+wrapped('jack') // 与fn执行的效果是一致的
+
+
+// 定义了一个类，应用类三个装饰器，两个装饰器本身，
+// 目前的浏览器和node是不能识别的，需要通过@babel/plugin-proposal-decorators来转换
+@log // 装饰器 记录日志信息
+@immutable // 装饰器 数据遍历
+class Example {
+    @observable price = 0 // 装饰器-观察属性
+    @observable count = 1 // 装饰器-计算属性
+
+    constructor(price) {
+        this.price = price
+    }
+
+    @computed get total() {
+        return this.price * this.mount
+    }
+}
