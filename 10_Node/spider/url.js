@@ -12,15 +12,17 @@ console.log(obj)
  * 2、获取源码内容
  * 3、确定要查找的目标的正则表达式
  * 4、根据正则表达式，匹配源码内容，得到输出结果
+ * 
+ * axios获取网页源码，需要读取res.data ,直接用res是不行的
  */
 let ttUrl = 'https://www.woyaogexing.com/touxiang/'
 axios.get(ttUrl, {
   headers: { 'X-Requested-With': 'XMLHttpRequest'}
 }).then(res => {
-  // console.log(res)
-  let reg = /<img class="lazy"(.*)title="喜欢可以重复吗">/igs
-  // 解析html内容
-  let resource = reg.exec(res)
+  console.log(res.data)
+  let reg = /<img class="lazy" src="(.*?).jpeg">/igs
+  // // 解析html内容
+  let resource = reg.exec(res.data)
   console.log('99999', resource)
 })
 
