@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/guanping1210/relearn-web#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "babel": "^6.23.0",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
