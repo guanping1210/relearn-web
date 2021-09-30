@@ -12,9 +12,10 @@
     this.status = 'Pending' // 状态只能通过handler的参数来改变
     this.val = null
     // 要执行一下handler参数, handler是个函数，接收两个可以更改状态的函数
-    handler(triggerResolve, triggerReject)
+    handler(this.triggerResolve, this.triggerReject)
   }
 
+  // 为什么要用setTimeout呢，因为
   triggerResolve(val) {
     if(this.status === 'Pending') {
       this.status = 'Fuilled'

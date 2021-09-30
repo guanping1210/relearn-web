@@ -1,24 +1,31 @@
 const p1 = new Promise(resolve => {
   setTimeout(() => {
     resolve(10)
+    console.log(10)
   }, 10000)
 })
 
 const p2 = new Promise(resolve => {
   setTimeout(() => {
     resolve(20)
+    console.log(20)
+
   }, 2000)
 })
 
 const p3 = new Promise(resolve => {
   setTimeout(() => {
     resolve(30)
+    console.log(30)
+
   }, 3000)
 })
 
 const p4 = new Promise(resolve => {
   setTimeout(() => {
     resolve(40)
+    console.log(40)
+
   }, 4000)
 })
 
@@ -37,6 +44,7 @@ const chain1 = async(list = []) => {
 
 const chain2 = (list = []) => {
   list.reduce((c,p) => {
+    console.log('===',c, p)
     c.then(p)
   }, Promise.resolve())
 }
