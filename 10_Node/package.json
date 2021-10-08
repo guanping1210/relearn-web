@@ -1,9 +1,0 @@
-{
-    "name": "1",
-    "description": "2",
-    "entry": "3",
-    "author": "4",
-    "scripts": {
-      "start":"test echo"
-    }
-  }
