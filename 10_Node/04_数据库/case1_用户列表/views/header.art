@@ -1,0 +1,6 @@
+<div>我是子模板</div>
+
+<!-- 模板继承位置 -->
+{{ block 'content' }}{{ /block }}
+
+<div>模板继承结束</div>

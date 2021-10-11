@@ -19,6 +19,7 @@
   "dependencies": {
     "@babel/core": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
+    "art-template": "^4.13.2",
     "axios": "^0.21.1",
     "babel": "^6.23.0",
     "babel-loader": "^8.2.2",
@@ -41,6 +42,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.1.0",
+    "router": "^1.3.5",
+    "serve-static": "^1.14.1",
     "style-loader": "^2.0.0",
     "typescript": "^4.2.0-dev.20201209",
     "webpack": "4.35.0",

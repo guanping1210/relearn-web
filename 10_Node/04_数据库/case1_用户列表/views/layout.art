@@ -7,6 +7,8 @@
     <title>Document</title>
   </head>
   <body>
-    <div>添加</div>
+    <!-- 书写模板 -->
+    {{ block 'content' }}
+    {{ /block }}
   </body>
 </html>

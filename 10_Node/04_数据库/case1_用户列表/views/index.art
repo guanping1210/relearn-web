@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- 变量读取 -->
+    {{ name }}
+    <%=age%>
+
+    <!-- 循环 -->
+    <ul>
+      {{each hobbits}}
+      <li>
+        {{ $value }}
+      </li>
+      {{/each}}
+    </ul>
+
+    <!-- 循环写法2： 所有语句，都用 <% %>包裹起来 -->
+    <ul>
+      <% for(var i = 0; i < hobbits.length; i ++) { %>
+      <li>{{ hobbits[i] }}</li>
+      <%}%>
+    </ul>
+
+    <!-- 引入子模板写法1 -->
+    {{ include './header.art' }}
+
+    <!-- 引入子模板写法2 -->
+    <% include('./header.art') %>
+
+    <!-- 模板继承 -->
+    {{ block 'content' }}
+    <p>模板继承哈哈哈哈哈1212123</p>
+    {{ /block }}
+  </body>
+</html>
