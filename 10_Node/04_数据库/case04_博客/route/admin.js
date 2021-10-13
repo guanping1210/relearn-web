@@ -4,43 +4,50 @@ const bodyParse = require('body-parser')
 const { User } = require('../model/user')
 const admin = express.Router()
 
-admin.get('/login', (req, res) => {
-    // res.send('博客管理页面')
-    res.render('admin/login')
-})
+// 登录页面
+admin.get('/login', require('./adminroute/loginPage'))
 
 // 登录功能
-admin.post('/login', async (req, res) => {
-    // 接收请求参数和密码 req.body
-    const { email = '', password = '' } = req.body
-    // 对参数进行验证
-    if(!email || !password) {
-        res.status(400).render('admin/error', { msg: '邮件地址或密码错误' })
-        return 
-    }
+admin.post('/login', require('./adminroute/login'))
 
-    // email作为唯一值，来查询
-    const checkUser = await User.findOne({ email })
-    
-    // 查询所有数据，返回数组然后筛选 fin() | 直接用参数进行查询一条数据 findOne()
-    if(!checkUser) {
-        res.status(400).render('admin/error', { msg: '该用户不存在' })
-        return 
-    }
+// 用户页面
+admin.get('/user', require('./adminroute/userPage'))
 
-    if(checkUser.password !== password) {
-        res.status(400).render('admin/error', { msg: '登录密码错误' })
-        return 
-    }
+//  退出登录
+admin.get('/logout', require('./adminroute/logout'))
 
-    // 验证通过
-    res.send('登录成功')
+// 添加用户页面
+admin.get('/user-edit', require('./adminroute/userEditPage').userAddPage)
+
+// 添加用户响应事件
+admin.post('/user-edit', require('./adminroute/userEditPage').addOrModifyUser)
+
+// 删除用户
+admin.get('/delete', async (req, res) => {
+    await User.deleteOne({ _id: req.query.id })
+    console.log('用户删除成功')
+    res.redirect('/admin/user')
 })
 
-admin.get('/login', (req, res) => {
-    res.send('博客管理页面')
-})
+// 文章管理
+admin.get('/article', require('./adminroute/article').articlePage)
 
-
+// 发布文章、编辑文章页面
+admin.get('/article-edit', require('./adminroute/article').articleEditPage)
 
 module.exports = admin
+
+/**
+ * cookie：存储数据空间，供服务器存储数据
+ *      以域名的形式区分；
+ *      有过期事件，超时会背浏览器自动删除；
+ *      请求服务器会自动带上;
+ * 
+ * session: 服务器端的用户数据
+ * 
+ * 流程：
+ *  客户端请求，服务端验证参数，生成sessionId，返回给客户端，存储到cookie中；
+ *  客户端请求携带cookie，服务端获取cookie中的sessionId，验明身份
+ * 
+ * express-session
+ */

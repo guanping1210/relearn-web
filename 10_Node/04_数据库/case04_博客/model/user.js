@@ -1,5 +1,7 @@
 /**
  * 用户管理相关的数据库操作
+ * 
+ * joi 批量校验
  */
 const mongoose = require('mongoose')
 
