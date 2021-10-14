@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParse = require('body-parser')
 // 数据库资源请求进来
 const { User } = require('../model/user')
+const ArticlEvent = require('./adminroute/article')
+const UserEvent = require('./adminroute/userEditPage')
 const admin = express.Router()
 
 // 登录页面
@@ -17,10 +19,10 @@ admin.get('/user', require('./adminroute/userPage'))
 admin.get('/logout', require('./adminroute/logout'))
 
 // 添加用户页面
-admin.get('/user-edit', require('./adminroute/userEditPage').userAddPage)
+admin.get('/user-edit', UserEvent.userAddPage)
 
 // 添加用户响应事件
-admin.post('/user-edit', require('./adminroute/userEditPage').addOrModifyUser)
+admin.post('/user-edit', UserEvent.addOrModifyUser)
 
 // 删除用户
 admin.get('/delete', async (req, res) => {
@@ -30,10 +32,13 @@ admin.get('/delete', async (req, res) => {
 })
 
 // 文章管理
-admin.get('/article', require('./adminroute/article').articlePage)
+admin.get('/article', ArticlEvent.articlePage)
 
 // 发布文章、编辑文章页面
-admin.get('/article-edit', require('./adminroute/article').articleEditPage)
+admin.get('/article-edit', ArticlEvent.articleEditPage)
+
+// 编辑、发布文章提交事件
+admin.post('/article-edit', ArticlEvent.addOrModifyArticle)
 
 module.exports = admin
 

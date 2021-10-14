@@ -1519,7 +1519,7 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bluebird@^3.5.5:
+bluebird@^3.5.0, bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.npm.taobao.org/bluebird/download/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha1-nyKcFb4nJFT/qXOs4NvueaGww28=
@@ -4599,6 +4599,13 @@ mongodb@4.1.2:
     mongodb-connection-string-url "^2.0.0"
   optionalDependencies:
     saslprep "^1.0.3"
+
+mongoose-sex-page@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/mongoose-sex-page/-/mongoose-sex-page-1.2.4.tgz#0891811d299dc92076faca65b1c069e56f93794b"
+  integrity sha512-lnw5Bc4l+8FbyauqKwQaJTpYDBJFnQcJjhiPNhd0EOhiLwBtOHjFxkhhlxpl4CNfaG+YXZxNkNbfPGRY7a/WKA==
+  dependencies:
+    bluebird "^3.5.0"
 
 mongoose@^6.0.10:
   version "6.0.10"
