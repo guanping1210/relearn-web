@@ -1,9 +1,7 @@
 const express = require('express')
-
+const HomeEvent = require('./homeEvent')
 const home = express.Router()
 
-home.get('/', (req, res) => {
-    res.send('博客首页')
-})
+home.get('/default', HomeEvent.homePage)
 
 module.exports = home

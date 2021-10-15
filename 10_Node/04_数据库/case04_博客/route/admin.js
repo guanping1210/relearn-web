@@ -1,5 +1,4 @@
 const express = require('express')
-const bodyParse = require('body-parser')
 // 数据库资源请求进来
 const { User } = require('../model/user')
 const ArticlEvent = require('./adminroute/article')

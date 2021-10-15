@@ -30,7 +30,7 @@ const login = async (req, res) => {
     req.session.username = checkUser.username // express-session会自动生成一个sessionId，存储到cookie中
     // 设置全局对象，所有模板都可以使用
     req.app.locals.userInfo = checkUser
-    res.redirect('/admin/user')
+    res.redirect('/home/default')
 }
 
 module.exports = login

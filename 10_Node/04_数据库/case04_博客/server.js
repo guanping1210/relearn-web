@@ -23,7 +23,7 @@ app.use(express.static(publicPath))
 // 全局处理, 拦截所有的请求, bodyParse能够将所有的post参数处理为 {key:value } 格式
 app.use(bodyParse.urlencoded({ extened: false }))
 // 统一拦截请求，处理session
-app.use(session({ secret: 'secret key'}))
+app.use(session({ secret: 'secret key', saveUninitialized: true }))
 // 统一拦截登录请求，判断是否登录：未登录则跳转去登录页面；已登录就去首页
 app.use('/admin', loginProxy.proxy)
 

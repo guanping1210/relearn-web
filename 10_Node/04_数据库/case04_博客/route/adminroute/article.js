@@ -13,7 +13,7 @@ const articlePage = async(req, res) => {
     // 先stringify后parse: 是因为栈溢出了。因为联合查询出来的数据会有很多其他的隐藏内容，这个内容对art-template来说太庞大了，无法正常渲染
     // 所以会提示栈溢出，这样经过处理，能够去除不必要的隐藏内容，从而正常渲染数据
     articles = JSON.parse(JSON.stringify(articles))
-
+    console.log(99999, articles)
     res.render('admin/article', {
         articles
     })
