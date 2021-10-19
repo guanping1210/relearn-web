@@ -19,3 +19,8 @@
 #### 开发 customeTable 组件库
 
 #### 实战 taro
+
+<!--
+    1、碰到webpack tap undefined问题，因为webpack@4.x.x， 而html-webpack-plugin@5.x.x，两个版本不匹配
+    2、碰到fs找不到的问题：webpack.config.js中添加 node: { fs: 'empty' }
+ -->

@@ -6,61 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
   <body>
-    <!-- <script src="./test.js"></script> -->
+    <!-- <div id="root"><img v-bind:src=`123${msg}` />{{msg}}</div> -->
+    <!-- <div id="root">
+      <img
+        :src="https://tse1-mm.cn.bing.net/th/id/{{id}}?rik=4KxekfOQD28FKA&riu=http%3a%2f%2fwww.desktx.com%2fd%2ffile%2fwallpaper%2fscenery%2f20170303%2fdfe53a7300794009a029131a062836d5.jpg&ehk=6ayU5y%2fwtGnzhu7g%2bJimm2REgEbHGczl9Mkbg3I1%2b5I%3d&risl=&pid=ImgRaw&r=0"
+      />{{msg}}
+    </div> -->
+    <div id="root">
+      <!-- <img
+      :src=`https://tse1-mm.cn.bing.net/th/id/${imgUrl}?rik=4KxekfOQD28FKA&riu=http%3a%2f%2fwww.desktx.com%2fd%2ffile%2fwallpaper%2fscenery%2f20170303%2fdfe53a7300794009a029131a062836d5.jpg&ehk=6ayU5y%2fwtGnzhu7g%2bJimm2REgEbHGczl9Mkbg3I1%2b5I%3d&risl=&pid=ImgRaw&r=0`
+      />  -->
+      <img :src=`http://www.dell-lee.com/imgs/vue3/${name}.png` alt=""
+      width="200" height="300"/>
+    </div>
+
     <script>
-      var sortArrayByParityII = function (nums) {
-        function isRight(index) {
-          return (
-            (index % 2 === 0 && nums[index] % 2 === 0) ||
-            (index % 2 === 1 && nums[index] % 2 === 1)
-          );
-        }
-
-        for (let i = 0; i < nums.length; i++) {
-          if (!isRight(i)) {
-            let p = i + 1;
-            while (p < nums.length) {
-              if (!isRight(p)) {
-                // 需要交换
-                [nums[i], nums[p]] = [nums[p], nums[i]]; // 交换数据
-                i = p; // 移动指针
-                break;
-              } else {
-                p++;
-              }
-            }
-          }
-        }
-
-        return nums;
-      };
-
-      // console.log(sortArrayByParityII([4, 2, 5, 7]));
-      // console.log(sortArrayByParityII([4, 1, 2, 5, 7, 8]));
-
-      // [648,831,560,997,192,897,986,829,424,843]
-      console.log(
-        sortArrayByParityII([648, 831, 560, 986, 192, 424, 997, 829, 897, 843])
-      );
-
-      const swap = (A, i, j) => {
-        [A[i], A[j]] = [A[j], A[i]];
-      };
-      var sortArrayByParityII = function (A) {
-        const n = A.length;
-        let j = 1;
-        for (let i = 0; i < n; i += 2) {
-          if (A[i] & 1) {
-            // 10 & 1 = 0  9 & 1 = 1
-            while (A[j] & 1) {
-              j += 2;
-            }
-            swap(A, i, j);
-          }
-        }
-        return A;
-      };
+      const app = new Vue({
+        el: "#root",
+        data: {
+          imgUrl: "R-C.8c372fd892b3bd371eb3a1df8bd7fc88",
+          name: "超市",
+        },
+      });
     </script>
   </body>
 </html>
+<!-- <div>
+  <div><img /></div>
+  <input type="text" />
+  <input type="text" />
+  <button></button>
+  <div>
+    <span></span>
+    <span></span>
+  </div>
+
+  @media () { }
+</div> -->
